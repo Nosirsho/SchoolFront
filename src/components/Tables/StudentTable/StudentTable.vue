@@ -23,27 +23,22 @@ onMounted(async () => {
           <th
             class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
           >
-            FirstName
+            ФИО
           </th>
           <th
             class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
           >
-            MiddleName
+            Дата рождения
           </th>
           <th
             class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
           >
-            LastName
+            Класс
           </th>
           <th
             class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
           >
-            BirthDate
-          </th>
-          <th
-            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-          >
-            Sex
+            Пол
           </th>
           <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
         </tr>
@@ -54,10 +49,9 @@ onMounted(async () => {
         <StudentTableItem
           v-for="(item, index) in items"
           :key="index"
-          :firstName="item.firstName"
-          :middle-name="item.middleName"
-          :last-name="item.lastName"
+          :full-name="item.fullName"
           :birth-date="item.birthDate"
+          :grade-level="item.gradeLevel"
           :sex="item.sex"
         />
         <!--End StudentTableItem-->
