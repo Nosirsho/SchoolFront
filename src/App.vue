@@ -2,8 +2,10 @@
 import Sidebar from './components/Sidebar/Sidebar.vue'
 import Header from './components/Header/Header.vue'
 import Main from './components/main/Main.vue'
+import StudentEditForm from './components/Forms/StudentEditForm.vue';
 </script>
 <template>
+  <StudentEditForm/>
   <div>
     <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
       <div
