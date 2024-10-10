@@ -1,7 +1,9 @@
 <script setup>
 import TeacherTableItem from './TeacherTableItem.vue'
-import { onMounted, ref } from 'vue'
+import { inject, onMounted, ref } from 'vue'
 import axios from 'axios'
+
+const { openAddForm } = inject('AddFormActions')
 
 const items = ref([])
 
@@ -14,6 +16,8 @@ onMounted(async () => {
     console.log(e)
   }
 })
+
+
 </script>
 <template>
   <div>
@@ -40,7 +44,16 @@ onMounted(async () => {
           >
             Пол
           </th>
-          <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-green-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            <button
+              @click="openAddForm"
+              class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              + Add
+            </button>
+          </th>
         </tr>
       </thead>
 
