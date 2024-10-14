@@ -1,54 +1,51 @@
 <script setup>
-import { onMounted, ref } from 'vue'
 import Datepicker from 'vue3-datepicker'
-import axios from 'axios'
-import utils from '../../utils/utils.js'
-
 const emit = defineEmits(['closeAddForm'])
-const gradeLevels = ref([])
-const selectedGradeLevel = ref([])
-const student = ref({
-  firstName: 'firstName',
-  lastName: 'lastName',
-  middleName: 'middleName',
-  birthDate: null,
-  gender: 0
-})
-
-const addStudent = () => {
-  axios
-    .post('http://localhost:5296/Student', {
-      firstName: student.value.firstName,
-      lastName: student.value.lastName,
-      middleName: student.value.middleName,
-      birthDate: utils.formatDate(student.value.birthDate),
-      sex: parseInt(student.value.gender),
-      gradeLevelId: selectedGradeLevel.value
-    })
-    .then((response) => {
-      student.value.firstName = null
-      student.value.lastName = null
-      student.value.middleName = null
-      student.value.birthDate = new Date(Date.now())
-      student.value.gender = 0
-      console.log(response.data) // Handle successful response
-    })
-    .catch((error) => {
-      console.error(error) // Handle errors
-    })
-}
-
-onMounted(async () => {
-  try {
-    const { data } = await axios.get('http://localhost:5296/GradeLevel')
-    gradeLevels.value = data
-    console.log(gradeLevels.value)
-  } catch (e) {
-    console.log(e)
-  }
-})
 </script>
+<script>
+import utils from '../../utils/utils.js'
+import axios from 'axios'
 
+export default {
+  data() {
+    return {
+      teacher: {
+        firstName: 'firstName',
+        lastName: 'lastName',
+        middleName: 'middleName',
+        phone: '92-92-92-92',
+        birthDate: null,
+        gender: 0
+      }
+    }
+  },
+  methods: {
+    addTeacher: async (teacher) => {
+      axios
+        .post('http://localhost:5296/Teacher', {
+          firstName: teacher.firstName,
+          lastName: teacher.lastName,
+          middleName: teacher.middleName,
+          phone: teacher.phone,
+          birthDate: utils.formatDate(teacher.birthDate),
+          sex: parseInt(teacher.gender)
+        })
+        .then((response) => {
+          teacher.firstName = null
+          teacher.lastName = null
+          teacher.middleName = null
+          teacher.phone = null
+          teacher.birthDate = new Date( Date.now());
+          teacher.gender = 0
+          console.log(response.data) // Handle successful response
+        })
+        .catch((error) => {
+          console.error(error) // Handle errors
+        })
+    }
+  }
+}
+</script>
 <template>
   <div class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-60"></div>
   <div class="bg-black w-96 h-full fixed right-0 top-0 z-30 p-8">
@@ -67,7 +64,7 @@ onMounted(async () => {
           id="first-name"
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
           placeholder="Имя"
-          v-model="student.firstName"
+          v-model="teacher.firstName"
           required
         />
       </div>
@@ -77,7 +74,7 @@ onMounted(async () => {
           id="last-name"
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
           placeholder="Фамилия"
-          v-model="student.lastName"
+          v-model="teacher.lastName"
           required
         />
       </div>
@@ -87,17 +84,28 @@ onMounted(async () => {
           id="middle-name"
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
           placeholder="Отчество"
-          v-model="student.middleName"
+          v-model="teacher.middleName"
           required
         />
       </div>
+      <div class="mb-5">
+        <input
+          type="text"
+          id="phone"
+          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+          placeholder="Телефон"
+          v-model="teacher.phone"
+          required
+        />
+      </div>
+
       <Datepicker
-        v-model="student.birthDate"
+        v-model="teacher.birthDate"
         class="shadow-sm my-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
       />
       <div class="relative">
         <select
-          v-model="student.gender"
+        v-model="teacher.gender"
           class="shadow-sm my-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
         >
           <option value="0">Не выбран</option>
@@ -105,18 +113,8 @@ onMounted(async () => {
           <option value="2">Ж</option>
         </select>
       </div>
-      <div class="relative">
-        <select
-          v-model="selectedGradeLevel"
-          class="shadow-sm my-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-        >
-          <option v-for="gradeLevel in gradeLevels" :key="gradeLevel.id" :value="gradeLevel.id">
-            {{ gradeLevel.name }}
-          </option>
-        </select>
-      </div>
       <button
-        @click.prevent="addStudent"
+        @click.prevent="addTeacher(teacher)"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         Добавить

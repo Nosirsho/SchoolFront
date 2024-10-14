@@ -1,11 +1,24 @@
 <script setup>
-import TeacherTableItem from './TeacherTableItem.vue'
-import { inject, onMounted, ref } from 'vue'
+import { provide, onMounted, ref } from 'vue'
 import axios from 'axios'
 
-const { openAddForm } = inject('AddFormActions')
+import TeacherTableItem from './TeacherTableItem.vue'
+import TeacherEditForm from '../../Forms/TeacherEditForm.vue'
+
 
 const items = ref([])
+
+const isVisibleForm = ref(false)
+const openAddForm = async () => {
+  isVisibleForm.value = true
+}
+const closeAddForm = async () => {
+  isVisibleForm.value = false
+}
+provide('AddFormActions', {
+  openAddForm,
+  closeAddForm
+})
 
 onMounted(async () => {
   try {
@@ -21,6 +34,7 @@ onMounted(async () => {
 </script>
 <template>
   <div>
+    <TeacherEditForm @close-add-form="closeAddForm" v-if="isVisibleForm" />
     <table class="min-w-full">
       <thead>
         <tr>

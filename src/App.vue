@@ -1,25 +1,11 @@
 <script setup>
 import { ref, provide } from 'vue'
 
-import Sidebar from './components/sidebar/Sidebar.vue'
+import Sidebar from './components/Sidebar/Sidebar.vue'
 import Header from './components/Header/Header.vue'
 import Main from './components/main/Main.vue'
-import StudentEditForm from './components/Forms/StudentEditForm.vue'
-
-const isVisibleForm = ref(true)
-const openAddForm = async () => {
-  isVisibleForm.value = true
-}
-const closeAddForm = async () => {
-  isVisibleForm.value = false
-}
-provide('AddFormActions', {
-  openAddForm,
-  closeAddForm
-})
 </script>
 <template>
-  <StudentEditForm @close-add-form="closeAddForm" v-if="isVisibleForm" />
   <div>
     <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
       <div
