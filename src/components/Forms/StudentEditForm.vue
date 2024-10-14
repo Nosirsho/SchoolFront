@@ -15,14 +15,12 @@ export default {
         middleName: 'middleName',
         phone: '92-92-92-92',
         birthDate: null,
-        gender: 1
+        gender: 'М'
       }
     }
   },
   methods: {
     addTeacher: async (teacher) => {
-      console.log('1: ' + teacher.birthDate)
-      console.log('2: ' + utils.formatDate(teacher.birthDate))
       axios
         .post('http://localhost:5296/Teacher', {
           firstName: teacher.firstName,
@@ -30,10 +28,15 @@ export default {
           middleName: teacher.middleName,
           phone: teacher.phone,
           birthDate: utils.formatDate(teacher.birthDate),
-          sex: teacher.gender
+          sex: parseInt(teacher.gender)
         })
         .then((response) => {
-          teacher = null
+          teacher.firstName = null
+          teacher.lastName = null
+          teacher.middleName = null
+          teacher.phone = null
+          teacher.birthDate = new Date( Date.now());
+          teacher.gender = 0
           console.log(response.data) // Handle successful response
         })
         .catch((error) => {
@@ -102,6 +105,7 @@ export default {
       />
       <div class="relative">
         <select
+        v-model="teacher.gender"
           class="shadow-sm my-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
         >
           <option value="0">Не выбран</option>
