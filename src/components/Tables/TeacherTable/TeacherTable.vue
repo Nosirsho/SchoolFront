@@ -5,20 +5,33 @@ import axios from 'axios'
 import TeacherTableItem from './TeacherTableItem.vue'
 import TeacherEditForm from '../../Forms/TeacherEditForm.vue'
 
-
 const items = ref([])
-
 const isVisibleForm = ref(false)
+const editTeacherId = ref(null)
+const isEdit = ref(false)
+
+const handleAddTeacher = (teacher) => {
+  items.value.push(teacher)
+}
+const handleEditTeacher = (teacher) => {
+  const index = items.value.findIndex((item) => item.id === teacher.id)
+  if (index !== -1) {
+    items.value.splice(index, 1, teacher)
+  }
+}
+
+const handleTeacherEdit = (teacherId) => {
+  isVisibleForm.value = true
+  editTeacherId.value = teacherId
+  isEdit.value = true
+}
 const openAddForm = async () => {
   isVisibleForm.value = true
+  isEdit.value = false
 }
 const closeAddForm = async () => {
   isVisibleForm.value = false
 }
-provide('AddFormActions', {
-  openAddForm,
-  closeAddForm
-})
 
 onMounted(async () => {
   try {
@@ -29,12 +42,17 @@ onMounted(async () => {
     console.log(e)
   }
 })
-
-
 </script>
 <template>
   <div>
-    <TeacherEditForm @close-add-form="closeAddForm" v-if="isVisibleForm" />
+    <TeacherEditForm
+      @close-add-form="closeAddForm"
+      @addTeacher="handleAddTeacher"
+      @editTeacher="handleEditTeacher"
+      :editTeacherId="editTeacherId"
+      :isEdit="isEdit"
+      v-if="isVisibleForm"
+    />
     <table class="min-w-full">
       <thead>
         <tr>
@@ -76,10 +94,12 @@ onMounted(async () => {
         <TeacherTableItem
           v-for="(item, index) in items"
           :key="index"
+          :id="item.id"
           :full-name="item.fullName"
           :birth-date="item.birthDate"
           :phone="item.phone"
           :sex="item.sex"
+          @editTeacher="handleTeacherEdit"
         />
         <!--End TeacherTableItem-->
       </tbody>

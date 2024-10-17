@@ -1,5 +1,6 @@
 <script setup>
 defineProps({
+  id: String,
   fullName: String,
   birthDate: String,
   phone: String,
@@ -31,7 +32,9 @@ defineProps({
     <td
       class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200"
     >
-      <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+      <button class="text-indigo-600 hover:text-indigo-900" @click="$emit('editTeacher', id)">
+        Edit
+      </button>
     </td>
   </tr>
 </template>
