@@ -15,7 +15,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['closeAddForm'])
+const emit = defineEmits(['addTeacher', 'editTeacher', 'closeAddForm'])
 const teacher = ref({
   firstName: '',
   lastName: '',

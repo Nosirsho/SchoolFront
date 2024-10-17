@@ -1,5 +1,7 @@
 <script setup>
+import { ref } from 'vue'
 import SidebarItem from './SidebarItem.vue'
+const sidebarOpen = ref(false)
 </script>
 <template>
   <div
