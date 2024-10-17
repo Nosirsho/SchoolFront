@@ -1,6 +1,4 @@
 <script setup>
-import { ref, provide } from 'vue'
-
 import Sidebar from './components/Sidebar/Sidebar.vue'
 import Header from './components/Header/Header.vue'
 import Main from './components/main/Main.vue'

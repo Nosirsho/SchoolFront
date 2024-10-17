@@ -6,14 +6,33 @@ import StudentTableItem from './StudentTableItem.vue'
 import StudentEditForm from '../../Forms/StudentEditForm.vue'
 
 const items = ref([])
-
 const isVisibleForm = ref(false)
+const editStudentId = ref(null)
+const isEdit = ref(false)
+
+const handleAddStudent = (student) => {
+  items.value.push(student)
+}
+const handleEditStudent = (student) => {
+  const index = items.value.findIndex((item) => item.id === student.id)
+  if (index !== -1) {
+    items.value.splice(index, 1, student)
+  }
+}
+
+const handleStudentEdit = (studentId) => {
+  isVisibleForm.value = true
+  editStudentId.value = studentId
+  isEdit.value = true
+}
 const openAddForm = async () => {
   isVisibleForm.value = true
+  isEdit.value = false
 }
 const closeAddForm = async () => {
   isVisibleForm.value = false
 }
+
 provide('AddFormActions', {
   openAddForm,
   closeAddForm
@@ -23,7 +42,6 @@ onMounted(async () => {
   try {
     const { data } = await axios.get('http://localhost:5296/Student')
     items.value = data
-    console.log(items.value)
   } catch (e) {
     console.log(e)
   }
@@ -31,7 +49,14 @@ onMounted(async () => {
 </script>
 <template>
   <div>
-    <StudentEditForm @close-add-form="closeAddForm" v-if="isVisibleForm" />
+    <StudentEditForm
+      @close-add-form="closeAddForm"
+      @addStudent="handleAddStudent"
+      @editStudent="handleEditStudent"
+      :editStudentId="editStudentId"
+      :isEdit="isEdit"
+      v-if="isVisibleForm"
+    />
     <table class="min-w-full">
       <thead>
         <tr>
@@ -73,10 +98,12 @@ onMounted(async () => {
         <StudentTableItem
           v-for="(item, index) in items"
           :key="index"
+          :id="item.id"
           :full-name="item.fullName"
           :birth-date="item.birthDate"
           :grade-level="item.gradeLevel"
           :sex="item.sex"
+          @editStudent="handleStudentEdit"
         />
         <!--End StudentTableItem-->
       </tbody>

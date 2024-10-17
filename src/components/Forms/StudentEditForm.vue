@@ -1,37 +1,81 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import Datepicker from 'vue3-datepicker'
 import axios from 'axios'
 import utils from '../../utils/utils.js'
+
+const props = defineProps({
+  editStudentId: {
+    type: String,
+    required: false
+  },
+  isEdit: {
+    type: Boolean,
+    required: false
+  }
+})
 
 const emit = defineEmits(['closeAddForm'])
 const gradeLevels = ref([])
 const selectedGradeLevel = ref([])
 const student = ref({
-  firstName: 'firstName',
-  lastName: 'lastName',
-  middleName: 'middleName',
+  firstName: '',
+  lastName: '',
+  middleName: '',
   birthDate: null,
-  gender: 0
+  sex: 0
 })
 
-const addStudent = () => {
+watchEffect(async () => {
+  if (props.isEdit) {
+    try {
+      const response = await axios.get(`http://localhost:5296/Student/${props.editStudentId}`)
+      student.value = response.data
+      student.value.birthDate = new Date(student.value.birthDate)
+      selectedGradeLevel.value = student.value.gradeLevelId
+    } catch (error) {
+      console.error('Ошибка при поиске:', error)
+    }
+  }
+})
+
+const toggleStudentEvent = () => {
+  props.isEdit ? editStudentResp() : addStudentResp()
+}
+
+const addStudentResp = () => {
   axios
     .post('http://localhost:5296/Student', {
       firstName: student.value.firstName,
       lastName: student.value.lastName,
       middleName: student.value.middleName,
       birthDate: utils.formatDate(student.value.birthDate),
-      sex: parseInt(student.value.gender),
+      sex: parseInt(student.value.sex),
       gradeLevelId: selectedGradeLevel.value
     })
     .then((response) => {
-      student.value.firstName = null
-      student.value.lastName = null
-      student.value.middleName = null
-      student.value.birthDate = new Date(Date.now())
-      student.value.gender = 0
-      console.log(response.data) // Handle successful response
+      emit('addStudent', response.data)
+      emit('closeAddForm')
+    })
+    .catch((error) => {
+      console.error(error) // Handle errors
+    })
+}
+
+const editStudentResp = () => {
+  axios
+    .put(`http://localhost:5296/Student/${student.value.id}`, {
+      id: student.value.id,
+      firstName: student.value.firstName,
+      lastName: student.value.lastName,
+      middleName: student.value.middleName,
+      birthDate: utils.formatDate(student.value.birthDate),
+      sex: parseInt(student.value.sex),
+      gradeLevelId: selectedGradeLevel.value
+    })
+    .then((response) => {
+      emit('editStudent', response.data)
+      emit('closeAddForm')
     })
     .catch((error) => {
       console.error(error) // Handle errors
@@ -42,7 +86,6 @@ onMounted(async () => {
   try {
     const { data } = await axios.get('http://localhost:5296/GradeLevel')
     gradeLevels.value = data
-    console.log(gradeLevels.value)
   } catch (e) {
     console.log(e)
   }
@@ -97,7 +140,7 @@ onMounted(async () => {
       />
       <div class="relative">
         <select
-          v-model="student.gender"
+          v-model="student.sex"
           class="shadow-sm my-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
         >
           <option value="0">Не выбран</option>
@@ -116,10 +159,10 @@ onMounted(async () => {
         </select>
       </div>
       <button
-        @click.prevent="addStudent"
+        @click.prevent="toggleStudentEvent"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
-        Добавить
+        {{ isEdit ? 'Изменить' : 'Добавить' }}
       </button>
     </form>
   </div>
