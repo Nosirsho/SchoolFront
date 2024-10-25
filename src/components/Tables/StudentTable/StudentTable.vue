@@ -1,12 +1,15 @@
 <script setup>
-import { provide, onMounted, ref } from 'vue'
-import axios from 'axios'
+import { onMounted, ref } from 'vue'
 import { useAutoAnimate } from '@formkit/auto-animate/vue'
 
-import StudentTableItem from './StudentTableItem.vue'
-import StudentEditForm from '../../Forms/StudentEditForm.vue'
+import { useStudentStore } from '@/stores/StudentStore.js'
+
+import StudentTableItem from '&/Tables/StudentTable/StudentTableItem.vue'
+import StudentEditForm from '&/Forms/StudentEditForm.vue'
 
 const [parent] = useAutoAnimate()
+
+const studentStore = useStudentStore()
 
 const items = ref([])
 const isVisibleForm = ref(false)
@@ -14,66 +17,38 @@ const editStudentId = ref(null)
 const isEdit = ref(false)
 const searchInput = ref()
 
-const handleAddStudent = (student) => {
-  items.value.push(student)
-}
-const handleEditStudent = (student) => {
-  const index = items.value.findIndex((item) => item.id === student.id)
-  if (index !== -1) {
-    items.value.splice(index, 1, student)
-  }
-}
-
-const handleStudentEdit = (studentId) => {
+const handleSelectedEditStudent = (studentId) => {
   isVisibleForm.value = true
   editStudentId.value = studentId
   isEdit.value = true
 }
-const handleDeleteStudent = (studentId) => {
-  items.value = items.value.filter((t) => t.id !== studentId)
+const handleDeleteSelectedStudent = async (id) => {
+  await studentStore.deleteStudent(id)
+  items.value = studentStore.data
 }
-
-const openAddForm = async () => {
+const openAddForm = () => {
   isVisibleForm.value = true
   isEdit.value = false
 }
-const closeAddForm = async () => {
+const handleCloseAddForm = () => {
   isVisibleForm.value = false
 }
 
-provide('AddFormActions', {
-  openAddForm,
-  closeAddForm
-})
-
 const searchStudents = async () => {
-  try {
-    await axios
-      .get('http://localhost:5296/Student/search', { params: { search: searchInput.value } })
-      .then((response) => {
-        items.value = response.data
-        console.log(response.data)
-      })
-  } catch (e) {
-    console.log(e)
-  }
+  const params = { search: searchInput.value }
+  await studentStore.searchByName(params)
+  items.value = studentStore.data
 }
 
 onMounted(async () => {
-  try {
-    const { data } = await axios.get('http://localhost:5296/Student')
-    items.value = data
-  } catch (e) {
-    console.log(e)
-  }
+  await studentStore.getStudents()
+  items.value = studentStore.data
 })
 </script>
 <template>
   <div ref="parent">
     <StudentEditForm
-      @close-add-form="closeAddForm"
-      @addStudent="handleAddStudent"
-      @editStudent="handleEditStudent"
+      @closeAddForm="handleCloseAddForm"
       :editStudentId="editStudentId"
       :isEdit="isEdit"
       v-if="isVisibleForm"
@@ -167,8 +142,8 @@ onMounted(async () => {
           :birth-date="item.birthDate"
           :grade-level="item.gradeLevel"
           :sex="item.sex"
-          @editStudent="handleStudentEdit"
-          @deleteStudent="handleDeleteStudent"
+          @selectedEditStudent="handleSelectedEditStudent"
+          @deleteSelectedStudent="handleDeleteSelectedStudent"
         />
         <!--End StudentTableItem-->
       </tbody>

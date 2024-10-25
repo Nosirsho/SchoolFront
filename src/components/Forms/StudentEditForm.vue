@@ -1,9 +1,11 @@
 <script setup>
-import { onMounted, ref, watchEffect } from 'vue'
+import { onMounted, ref } from 'vue'
 import Datepicker from 'vue3-datepicker'
 import axios from 'axios'
-import utils from '../../utils/utils.js'
+import utils from '@/utils/utils.js'
+import { useStudentStore } from '@/stores/StudentStore.js'
 
+const studentStore = useStudentStore()
 const props = defineProps({
   editStudentId: {
     type: String,
@@ -15,7 +17,6 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['closeAddForm'])
 const gradeLevels = ref([])
 const selectedGradeLevel = ref([])
 const student = ref({
@@ -26,63 +27,45 @@ const student = ref({
   sex: 0
 })
 
-watchEffect(async () => {
-  if (props.isEdit) {
-    try {
-      const response = await axios.get(`http://localhost:5296/Student/${props.editStudentId}`)
-      student.value = response.data
-      student.value.birthDate = new Date(student.value.birthDate)
-      selectedGradeLevel.value = student.value.gradeLevelId
-    } catch (error) {
-      console.error('Ошибка при поиске:', error)
-    }
-  }
-})
-
 const toggleStudentEvent = () => {
   props.isEdit ? editStudentResp() : addStudentResp()
 }
 
-const addStudentResp = () => {
-  axios
-    .post('http://localhost:5296/Student', {
-      firstName: student.value.firstName,
-      lastName: student.value.lastName,
-      middleName: student.value.middleName,
-      birthDate: utils.formatDate(student.value.birthDate),
-      sex: parseInt(student.value.sex),
-      gradeLevelId: selectedGradeLevel.value
-    })
-    .then((response) => {
-      emit('addStudent', response.data)
-      emit('closeAddForm')
-    })
-    .catch((error) => {
-      console.error(error) // Handle errors
-    })
+const addStudentResp = async () => {
+  const params = {
+    firstName: student.value.firstName,
+    lastName: student.value.lastName,
+    middleName: student.value.middleName,
+    birthDate: utils.formatDate(student.value.birthDate),
+    sex: parseInt(student.value.sex),
+    gradeLevelId: selectedGradeLevel.value
+  }
+  await studentStore.addStudent(params)
+  emit('closeAddForm')
 }
 
-const editStudentResp = () => {
-  axios
-    .put(`http://localhost:5296/Student/${student.value.id}`, {
-      id: student.value.id,
-      firstName: student.value.firstName,
-      lastName: student.value.lastName,
-      middleName: student.value.middleName,
-      birthDate: utils.formatDate(student.value.birthDate),
-      sex: parseInt(student.value.sex),
-      gradeLevelId: selectedGradeLevel.value
-    })
-    .then((response) => {
-      emit('editStudent', response.data)
-      emit('closeAddForm')
-    })
-    .catch((error) => {
-      console.error(error) // Handle errors
-    })
+const editStudentResp = async () => {
+  const params = {
+    id: student.value.id,
+    firstName: student.value.firstName,
+    lastName: student.value.lastName,
+    middleName: student.value.middleName,
+    birthDate: utils.formatDate(student.value.birthDate),
+    sex: parseInt(student.value.sex),
+    gradeLevelId: selectedGradeLevel.value
+  }
+  await studentStore.editStudent(params)
+  emit('closeAddForm')
 }
 
 onMounted(async () => {
+  if (props.isEdit) {
+    await studentStore.getStudentById(props.editStudentId)
+    student.value = studentStore.currentStudent
+    student.value.birthDate = new Date(student.value.birthDate)
+    selectedGradeLevel.value = student.value.gradeLevelId
+  }
+
   try {
     const { data } = await axios.get('http://localhost:5296/GradeLevel')
     gradeLevels.value = data
@@ -90,6 +73,8 @@ onMounted(async () => {
     console.log(e)
   }
 })
+
+const emit = defineEmits(['closeAddForm'])
 </script>
 
 <template>

@@ -2,7 +2,7 @@
 import { ref, watchEffect } from 'vue'
 import Datepicker from 'vue3-datepicker'
 import axios from 'axios'
-import utils from '../../utils/utils.js'
+import utils from '@/utils/utils.js'
 
 const props = defineProps({
   editTeacherId: {

@@ -1,6 +1,10 @@
 <script setup>
-import DashCard from '@/components/DashCard/DashCard.vue';
-import StudentTable from '@/components/Tables/StudentTable/StudentTable.vue'
+import { useStudentStore } from '@/stores/StudentStore.js'
+
+import DashCard from '&/DashCard/DashCard.vue'
+import StudentTable from '&/Tables/StudentTable/StudentTable.vue'
+
+const studentStore = useStudentStore()
 </script>
 <template>
   <div class="container px-6 py-8 mx-auto">
@@ -9,11 +13,7 @@ import StudentTable from '@/components/Tables/StudentTable/StudentTable.vue'
     <div class="mt-4">
       <div class="flex flex-wrap -mx-6">
         <!--DashCard-->
-        <DashCard />
-        <!--End DashCard-->
-        <DashCard />
-
-        <DashCard />
+        <DashCard :count="studentStore.studentsCount" :title="'Кол-во студентов'" />
       </div>
     </div>
 

@@ -1,6 +1,6 @@
 <script setup>
-import DashCard from '@/components/DashCard/DashCard.vue'
-import TeacherTable from '@/components/Tables/TeacherTable/TeacherTable.vue'
+import DashCard from '&/DashCard/DashCard.vue'
+import TeacherTable from '&/Tables/TeacherTable/TeacherTable.vue'
 </script>
 <template>
   <div class="container px-6 py-8 mx-auto">

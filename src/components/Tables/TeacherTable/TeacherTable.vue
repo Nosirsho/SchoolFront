@@ -3,8 +3,8 @@ import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useAutoAnimate } from '@formkit/auto-animate/vue'
 
-import TeacherTableItem from './TeacherTableItem.vue'
-import TeacherEditForm from '../../Forms/TeacherEditForm.vue'
+import TeacherTableItem from '&/Tables/TeacherTable/TeacherTableItem.vue'
+import TeacherEditForm from '&/Forms/TeacherEditForm.vue'
 
 const [parent] = useAutoAnimate(/* optional config */)
 
@@ -46,7 +46,6 @@ const searchTeachers = async () => {
       .get('http://localhost:5296/Teacher/search', { params: { search: searchInput.value } })
       .then((response) => {
         items.value = response.data
-        console.log(response.data)
       })
   } catch (e) {
     console.log(e)
@@ -57,7 +56,6 @@ onMounted(async () => {
   try {
     const { data } = await axios.get('http://localhost:5296/Teacher')
     items.value = data
-    console.log(items.value)
   } catch (e) {
     console.log(e)
   }

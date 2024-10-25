@@ -1,24 +1,12 @@
 <script setup>
-import axios from 'axios'
-
-const props = defineProps({
+defineProps({
   id: String,
   fullName: String,
   birthDate: String,
   gradeLevel: String,
   sex: String
 })
-
-const deleteStudent = async () => {
-  try {
-    await axios.delete(`http://localhost:5296/Student/${props.id}`).then((response) => {
-      emit('deleteStudent', response.data)
-      console.log(response.data)
-    })
-  } catch (e) {
-    console.log(e)
-  }
-}
+const emit = defineEmits(['selectedEditStudent', 'deleteSelectedStudent'])
 </script>
 <template>
   <tr class="hover:bg-slate-100">
@@ -47,14 +35,14 @@ const deleteStudent = async () => {
     >
       <button
         class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-md text-sm px-3 pb-0.5 dark:focus:ring-yellow-900"
-        @click="$emit('editStudent', id)"
+        @click="emit('selectedEditStudent', id)"
       >
         Edit
       </button>
       |
       <button
         class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-md text-sm px-3 pb-0.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-        @click="deleteStudent"
+        @click="emit('deleteSelectedStudent', id)"
       >
         Delete
       </button>

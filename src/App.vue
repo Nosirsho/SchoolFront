@@ -1,9 +1,9 @@
 <script setup>
-import {ref} from 'vue'
-import Sidebar from './components/Sidebar/Sidebar.vue'
-import Header from './components/Header/Header.vue'
-import Main from './components/main/Main.vue'
-const sidebarOpen = ref(false);
+import { ref } from 'vue'
+import Sidebar from '&/Sidebar/Sidebar.vue'
+import Header from '&/Header/Header.vue'
+import Main from '&/main/Main.vue'
+const sidebarOpen = ref(false)
 </script>
 <template>
   <div>
