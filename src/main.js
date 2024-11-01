@@ -8,10 +8,12 @@ import App from './App.vue'
 
 import TeacherPage from './pages/TeacherPage.vue'
 import StudentPage from './pages/StudentPage.vue'
+import SchedulePage from '@/pages/SchedulePage.vue'
 
 const routes = [
   { path: '/students', name: 'StudentPage', component: StudentPage },
-  { path: '/teachers', name: 'TeacherPage', component: TeacherPage }
+  { path: '/teachers', name: 'TeacherPage', component: TeacherPage },
+  { path: '/schedules', name: 'SchedulePage', component: SchedulePage },
 ]
 const router = createRouter({
   history: createWebHistory(),
