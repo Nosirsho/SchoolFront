@@ -16,7 +16,6 @@ export const useLessonStore = defineStore('lesson', () => {
     try {
       const response = await axios.get(url)
       data.value = response.data
-      console.log('PINIAlessonsData.value' + data.value)
       error.value = null
     } catch (error) {
       error.value = error

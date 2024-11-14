@@ -14,12 +14,15 @@ onMounted(async () => {
   await scheduleStore.getSchedules()
   data.value = scheduleStore.data
 })
+const sendScheduleList = () => {
+  scheduleStore.addScheduleList()
+}
 </script>
 <template>
   <div class="grid justify-items-end">
     <button
       class="bg-green-600 border border-green-900 hover:bg-green-700 text-white mt-2 py-1 px-4 mr-7 rounded-lg text-sm"
-      @click="addLesson"
+      @click="sendScheduleList"
     >
       Отправить
     </button>

@@ -77,12 +77,26 @@ export const useScheduleStore = defineStore('schedule', () => {
     data.value[gradeIdx].dayLessons[dayIdx].lessonNumbers.splice(lessonIdx, 1)
   }
 
+  const addScheduleList = async () => {
+    isLoading.value = true
+    try {
+      await axios.post(`${url}`, data.value)
+      error.value = null
+    } catch (error) {
+      error.value = error
+      data.value = null
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     data,
     dataCount,
     getSchedules,
     addLesson,
     deleteLesson,
-    setLesson
+    setLesson,
+    addScheduleList
   }
 })

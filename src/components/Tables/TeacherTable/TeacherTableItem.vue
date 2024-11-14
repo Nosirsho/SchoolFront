@@ -12,7 +12,6 @@ const deleteTeacher = async () => {
   try {
     await axios.delete(`http://localhost:5296/Teacher/${props.id}`).then((response) => {
       emit('deleteTeacher', response.data)
-      console.log(response.data)
     })
   } catch (e) {
     console.log(e)

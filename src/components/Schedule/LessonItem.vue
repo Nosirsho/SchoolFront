@@ -1,17 +1,21 @@
 <script setup>
-import {computed} from 'vue'
+import {computed, ref} from 'vue'
 const prop = defineProps({
   number: Number,
   lessonId: String,
   lessons: Array
 })
+
+const selectedLessonData = ref(prop.lessonId) 
+
 const selectedLesson = computed(() => {
-  return prop.lessonId
+  return selectedLessonData.value
 })
 
 //TODO: setLessonEmit найти правилбный метод для отправки выбранного select-элемента
 //во второй параметр метода. при передачи "selectedLesson" значение прихолит пустым
 const setLessonEmit = (event) => {
+  selectedLessonData.value = event.target.value
   emit('setLessonId', prop.number, event.target.value)
 }
 const emit = defineEmits(['deleteLesson', 'setLessonId'])
@@ -24,7 +28,7 @@ const emit = defineEmits(['deleteLesson', 'setLessonId'])
       {{ number }}
     </div>
     <select
-      v-model="selectedLesson"
+      v-model="selectedLessonData"
       @change="setLessonEmit"
       class="bg-gray-50 border border-gray-300 mx-0.5 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full"
     >
