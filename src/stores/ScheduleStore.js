@@ -89,6 +89,9 @@ export const useScheduleStore = defineStore('schedule', () => {
       isLoading.value = false
     }
   }
+  const filterByGradeLevel = (text) => {
+    return data.value.filter((g) => g.gradeLevel.toLowerCase().includes(text))
+  }
 
   return {
     data,
@@ -97,6 +100,7 @@ export const useScheduleStore = defineStore('schedule', () => {
     addLesson,
     deleteLesson,
     setLesson,
-    addScheduleList
+    addScheduleList,
+    filterByGradeLevel
   }
 })
