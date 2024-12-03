@@ -74,7 +74,11 @@ export const useScheduleStore = defineStore('schedule', () => {
     const lessonIdx = data.value[gradeIdx].dayLessons[dayIdx].lessonNumbers.findIndex(
       (x) => x.number === num
     )
+    console.log('before')
+    console.log(data.value)
     data.value[gradeIdx].dayLessons[dayIdx].lessonNumbers.splice(lessonIdx, 1)
+    console.log('end')
+    console.log(data.value)
   }
 
   const addScheduleList = async () => {
@@ -92,6 +96,14 @@ export const useScheduleStore = defineStore('schedule', () => {
   const filterByGradeLevel = (text) => {
     return data.value.filter((g) => g.gradeLevel.toLowerCase().includes(text))
   }
+  const dayStrngs = computed(
+    () =>
+      new Set(
+        data.value.flatMap((gradeLevel) => {
+          return gradeLevel.dayLessons.map((dayLesson) => dayLesson.dayString)
+        })
+      )
+  )
 
   return {
     data,
@@ -101,6 +113,7 @@ export const useScheduleStore = defineStore('schedule', () => {
     deleteLesson,
     setLesson,
     addScheduleList,
-    filterByGradeLevel
+    filterByGradeLevel,
+    dayStrngs
   }
 })

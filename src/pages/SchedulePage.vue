@@ -66,6 +66,18 @@ const filterByGradeLevel = () => {
   </div>
   <div class="container px-4 py-4 mx-auto">
     <div class="grid grid-cols-12 gap-2">
+      <div class="col-span-1 w-10 px-3 pb-3 bg-white border border-gray-200 rounded-lg ring-1">
+        ""
+      </div>
+      <div class="col-span-11 grid grid-cols-6 gap-2">
+        <h1
+          v-for="n in scheduleStore.dayStrngs"
+          :key="n"
+          class="col-span-1 block w-50 text-center bg-white border border-gray-200 rounded-lg ring-1"
+        >
+          {{ n }}
+        </h1>
+      </div>
       <GradeItem
         v-for="(item, index) in data"
         :key="index"

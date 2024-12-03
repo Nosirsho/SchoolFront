@@ -12,7 +12,6 @@ lessonData.value = lessonStore.data
 const prop = defineProps({
   gradeLevel: String,
   dayInt: Number,
-  dayString: String,
   lessonNumbers: Object
 })
 
@@ -33,8 +32,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="block w-50 px-3 pb-3 bg-white border border-gray-200 rounded-lg ring-1">
-    <h1 class="text-center underline underline-offset-2">{{ dayString }}</h1>
+  <div class="block w-50 px-3 py-3 bg-white border border-gray-200 rounded-lg ring-1">
     <LessonItem
       v-for="(item, index) in prop.lessonNumbers"
       :key="index"
