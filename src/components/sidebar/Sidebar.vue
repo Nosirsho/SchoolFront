@@ -42,6 +42,9 @@ const sidebarOpen = ref(false)
       <RouterLink to="/schedules">
         <SidebarItem title="Schedules" />
       </RouterLink>
+      <RouterLink to="/gradebooks">
+        <SidebarItem title="GradeBook" />
+      </RouterLink>
     </nav>
   </div>
 </template>

@@ -1,60 +1,39 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useAutoAnimate } from '@formkit/auto-animate/vue'
+import axios from 'axios'
 
-import { useStudentStore } from '@/stores/StudentStore.js'
+import GradeBookItem from '&/Tables/GradeBookTable/GradeBookItem.vue'
 
-import StudentTableItem from '&/Tables/StudentTable/StudentTableItem.vue'
-import StudentEditForm from '&/Forms/StudentEditForm.vue'
-
-const [parent] = useAutoAnimate()
-
-const studentStore = useStudentStore()
-
-const items = ref([])
-const isVisibleForm = ref(false)
-const editStudentId = ref(null)
-const isEdit = ref(false)
+const items = ref([ {id: 1, fullName : "Test Test Test", grade: 5},
+{id: 2, fullName : "Test Test Test", grade: 5},])
 const searchInput = ref()
 
-const handleSelectedEditStudent = (studentId) => {
-  isVisibleForm.value = true
-  editStudentId.value = studentId
-  isEdit.value = true
-}
-const handleDeleteSelectedStudent = async (id) => {
-  await studentStore.deleteStudent(id)
-  items.value = studentStore.data
-}
-const openAddForm = () => {
-  isVisibleForm.value = true
-  isEdit.value = false
-}
-const handleCloseAddForm = () => {
-  isVisibleForm.value = false
-}
 
-const searchStudents = async () => {
-  const params = { search: searchInput.value }
-  await studentStore.searchByName(params)
-  items.value = studentStore.data
+
+const searchTeachers = async () => {
+  try {
+    await axios
+      .get('http://localhost:5296/Teacher/search', { params: { search: searchInput.value } })
+      .then((response) => {
+        items.value = response.data
+      })
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 onMounted(async () => {
-  await studentStore.getStudents()
-  items.value = studentStore.data
+  try {
+    const { data } = await axios.get('http://localhost:5296/Teacher')
+    items.value = data
+  } catch (e) {
+    console.log(e)
+  }
 })
 </script>
 <template>
   <div ref="parent">
-    <StudentEditForm
-      @closeAddForm="handleCloseAddForm"
-      :editStudentId="editStudentId"
-      :isEdit="isEdit"
-      v-if="isVisibleForm"
-    />
-    
-    <!--Search Input Start-->
+
     <div class="max-auto mx-auto">
       <label
         for="default-search"
@@ -88,14 +67,13 @@ onMounted(async () => {
           required
         />
         <button
-          @click="searchStudents"
+          @click="searchTeachers"
           class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Search
         </button>
       </div>
     </div>
-    <!--Search Input End-->
 
     <table class="min-w-full">
       <thead>
@@ -108,18 +86,9 @@ onMounted(async () => {
           <th
             class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
           >
-            Дата рождения
+            Оценка
           </th>
-          <th
-            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-          >
-            Класс
-          </th>
-          <th
-            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-          >
-            Пол
-          </th>
+          
           <th
             class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-green-500 uppercase border-b border-gray-200 bg-gray-50"
           >
@@ -134,21 +103,16 @@ onMounted(async () => {
       </thead>
 
       <tbody class="bg-white" v-auto-animate>
-        <!--StudentTableItem-->
-        <StudentTableItem
+        <!--GradeBookItem-->
+        <GradeBookItem
           v-for="(item, index) in items"
           :key="index"
           :id="item.id"
           :full-name="item.fullName"
-          :birth-date="item.birthDate"
-          :grade-level="item.gradeLevel"
-          :sex="item.sex"
-          @selectedEditStudent="handleSelectedEditStudent"
-          @deleteSelectedStudent="handleDeleteSelectedStudent"
+          :grade="item.grade"
         />
-        <!--End StudentTableItem-->
+        <!--End GradeBookItem-->
       </tbody>
     </table>
   </div>
-  
 </template>

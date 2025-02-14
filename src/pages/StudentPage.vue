@@ -3,10 +3,21 @@ import { useStudentStore } from '@/stores/StudentStore.js'
 
 import DashCard from '&/DashCard/DashCard.vue'
 import StudentTable from '&/Tables/StudentTable/StudentTable.vue'
+import ToastComponent from '@/components/ToastComponent/ToastComponent.vue'
 
 const studentStore = useStudentStore()
+
+const handleOkButtonClick = () => {
+  studentStore.showModal.visible = false
+}
 </script>
 <template>
+  <ToastComponent
+    v-if="studentStore.showModalVisible"
+    :isError="studentStore.showModal.isError"
+    :meesage="studentStore.showModal.message"
+    @okButtonClick="handleOkButtonClick"
+  />
   <div class="container px-6 py-8 mx-auto">
     <h3 class="text-3xl font-medium text-gray-700">Dashboard</h3>
 
