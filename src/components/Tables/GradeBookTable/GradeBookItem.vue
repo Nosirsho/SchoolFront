@@ -2,9 +2,8 @@
 defineProps({
   id: String,
   fullName: String,
-  grade: Number
+  grades: Array
 })
-
 </script>
 <template>
   <tr class="hover:bg-slate-100">
@@ -14,10 +13,20 @@ defineProps({
       {{ fullName }}
     </td>
     <td
-      class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-900"
+      v-for="(grade, index) in grades"
+      :key="index"
+      :class="[
+        'px-1 border-b border-gray-200 text-sm text-gray-900',
+        index == 'd14' ? 'bg-gray-100' : ''
+      ]"
     >
-      <input type="number" id="first_product" :value=grade
-      class="bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1" />
+      <input
+        type="number"
+        id="first_product"
+        :value="grade"
+        class="bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1"
+        :readonly="index!=='d14'"
+      />
     </td>
     <td
       class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200"

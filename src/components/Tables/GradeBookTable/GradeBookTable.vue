@@ -1,39 +1,374 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import axios from 'axios'
+import {  ref } from 'vue'
 
-import GradeBookItem from '&/Tables/GradeBookTable/GradeBookItem.vue'
+import GradeBookItem from './GradeBookItem.vue'
 
-const items = ref([ {id: 1, fullName : "Test Test Test", grade: 5},
-{id: 2, fullName : "Test Test Test", grade: 5},])
+const items = ref([
+  {
+    id: 1,
+    fullName: 'Test Test Test1',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 2,
+    fullName: 'Test Test Test2',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 3,
+    fullName: 'Test Test Test3',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 4,
+    fullName: 'Test Test Test4',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 5,
+    fullName: 'Test Test Test5',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 6,
+    fullName: 'Test Test Test6',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 7,
+    fullName: 'Test Test Test7',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 8,
+    fullName: 'Test Test Test8',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 9,
+    fullName: 'Test Test Test9',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 10,
+    fullName: 'Test Test Test10',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 11,
+    fullName: 'Test Test Test11',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 12,
+    fullName: 'Test Test Test12',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 13,
+    fullName: 'Test Test Test13',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 14,
+    fullName: 'Test Test Test14',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 15,
+    fullName: 'Test Test Test15',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 16,
+    fullName: 'Test Test Test16',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 17,
+    fullName: 'Test Test Test17',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  },
+  {
+    id: 18,
+    fullName: 'Test Test Test18',
+    grades: {
+      d1: 5,
+      d2: 5,
+      d3: 5,
+      d4: 5,
+      d5: 5,
+      d6: 5,
+      d7: 5,
+      d8: 5,
+      d9: 5,
+      d10: 5,
+      d11: 5,
+      d12: 5,
+      d13: 5,
+      d14: 5
+    }
+  }
+])
 const searchInput = ref()
-
-
-
-const searchTeachers = async () => {
-  try {
-    await axios
-      .get('http://localhost:5296/Teacher/search', { params: { search: searchInput.value } })
-      .then((response) => {
-        items.value = response.data
-      })
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-onMounted(async () => {
-  try {
-    const { data } = await axios.get('http://localhost:5296/Teacher')
-    items.value = data
-  } catch (e) {
-    console.log(e)
-  }
-})
 </script>
 <template>
   <div ref="parent">
-
     <div class="max-auto mx-auto">
       <label
         for="default-search"
@@ -63,7 +398,7 @@ onMounted(async () => {
           type="search"
           id="default-search"
           class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder='Поиск по шаблону "Фамилия Имя Отчество"'
+          placeholder="Поиск по шаблону Фамилия Имя Отчество"
           required
         />
         <button
@@ -84,11 +419,16 @@ onMounted(async () => {
             ФИО
           </th>
           <th
-            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+            v-for="n in 14"
+            :key="n"
+            :class="[
+            'px-1 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50',
+            n === 14 ? 'bg-gray-300' : '' // добавляем класс bg-red-500 только для n === 14
+          ]"
           >
             Оценка
           </th>
-          
+
           <th
             class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-green-500 uppercase border-b border-gray-200 bg-gray-50"
           >
@@ -109,7 +449,7 @@ onMounted(async () => {
           :key="index"
           :id="item.id"
           :full-name="item.fullName"
-          :grade="item.grade"
+          :grades="item.grades"
         />
         <!--End GradeBookItem-->
       </tbody>
