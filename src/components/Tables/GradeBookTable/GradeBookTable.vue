@@ -1,371 +1,21 @@
 <script setup>
-import {  ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useGradeBookStore } from '@/stores/GradeBookStore.js'
 
 import GradeBookItem from './GradeBookItem.vue'
 
-const items = ref([
-  {
-    id: 1,
-    fullName: 'Test Test Test1',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 2,
-    fullName: 'Test Test Test2',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 3,
-    fullName: 'Test Test Test3',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 4,
-    fullName: 'Test Test Test4',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 5,
-    fullName: 'Test Test Test5',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 6,
-    fullName: 'Test Test Test6',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 7,
-    fullName: 'Test Test Test7',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 8,
-    fullName: 'Test Test Test8',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 9,
-    fullName: 'Test Test Test9',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 10,
-    fullName: 'Test Test Test10',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 11,
-    fullName: 'Test Test Test11',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 12,
-    fullName: 'Test Test Test12',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 13,
-    fullName: 'Test Test Test13',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 14,
-    fullName: 'Test Test Test14',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 15,
-    fullName: 'Test Test Test15',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 16,
-    fullName: 'Test Test Test16',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 17,
-    fullName: 'Test Test Test17',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  },
-  {
-    id: 18,
-    fullName: 'Test Test Test18',
-    grades: {
-      d1: 5,
-      d2: 5,
-      d3: 5,
-      d4: 5,
-      d5: 5,
-      d6: 5,
-      d7: 5,
-      d8: 5,
-      d9: 5,
-      d10: 5,
-      d11: 5,
-      d12: 5,
-      d13: 5,
-      d14: 5
-    }
-  }
-])
+const gradeBookStore = useGradeBookStore()
+
+const items = ref([])
 const searchInput = ref()
+const daysArray = ref([])
+
+
+onMounted(async () => {
+  await gradeBookStore.getGradeBooks()
+  items.value = gradeBookStore.data
+  daysArray.value = gradeBookStore.getDaysArray()
+})
 </script>
 <template>
   <div ref="parent">
@@ -410,7 +60,7 @@ const searchInput = ref()
       </div>
     </div>
 
-    <table class="min-w-full">
+    <table >
       <thead>
         <tr>
           <th
@@ -419,18 +69,18 @@ const searchInput = ref()
             ФИО
           </th>
           <th
-            v-for="n in 14"
+            v-for="n in daysArray.length"
             :key="n"
             :class="[
-            'px-1 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50',
-            n === 14 ? 'bg-gray-300' : '' // добавляем класс bg-red-500 только для n === 14
+            'mx-2 text-lg font-medium text-center text-gray-500 uppercase border border-gray-200 bg-gray-50',
+            n === daysArray.length ? 'bg-indigo-200' : '' // добавляем класс bg-red-500 только для n === 14
           ]"
           >
-            Оценка
+            {{daysArray[n-1].substring(8, 10)}}
           </th>
 
           <th
-            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-green-500 uppercase border-b border-gray-200 bg-gray-50"
+            class="px-6 py-2 text-xs font-medium leading-4 text-green-500 uppercase border-b border-gray-200 bg-gray-50"
           >
             <button
               @click="openAddForm"
@@ -448,7 +98,7 @@ const searchInput = ref()
           v-for="(item, index) in items"
           :key="index"
           :id="item.id"
-          :full-name="item.fullName"
+          :full-name="item.studentFullName"
           :grades="item.grades"
         />
         <!--End GradeBookItem-->

@@ -49,7 +49,7 @@ const editStudentResp = async () => {
     firstName: student.value.firstName,
     lastName: student.value.lastName,
     middleName: student.value.middleName,
-    birthDate: utils.formatDate(student.value.birthDate),
+    birthDate: student.value.birthDate,
     sex: parseInt(student.value.sex),
     gradeLevelId: selectedGradeLevel.value
   }

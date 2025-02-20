@@ -2,7 +2,7 @@
 import GradeBookTable from '&/Tables/GradeBookTable/GradeBookTable.vue'
 </script>
 <template>
-
+<div class="container mx-auto">
     <div class="mt-8"></div>
 
     <div class="flex flex-col mt-8">
@@ -16,4 +16,5 @@ import GradeBookTable from '&/Tables/GradeBookTable/GradeBookTable.vue'
         </div>
       </div>
     </div>
+</div>
 </template>
