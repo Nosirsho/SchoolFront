@@ -3,13 +3,14 @@ import { defineStore } from 'pinia'
 import utils from '@/utils/utils'
 
 const url = 'http://localhost:5296/Gradebook/'
+//http://localhost:5296/gradebook/2025-02-01/2025-02-10
 
 export const useGradeBookStore = defineStore('gradeBook', () => {
   const data = ref([])
   const error = ref(null)
   const showModal = ref([])
   const isLoading = ref(false)
-  const gradeItemsCount = ref(30)
+  const gradeItemsCount = ref()
   const daysArray = ref([])
 
   const getGradeBooks = async () => {
@@ -28,19 +29,48 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
       isLoading.value = false
     }
   }
+  const getIntervalGradeBooks = async (start) => {
+    const currentDate = new Date(start)
+    const year = currentDate.getFullYear()
+    const month = currentDate.getMonth()
+    const end = utils.formatDate(new Date(year, month + 1, 0))
 
-  const getDaysArray = ()=>{
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest('GET', url + start + '/' + end)
+
+      data.value = response
+      fillGradesTable(start)
+      error.value = null
+    } catch (error) {
+      error.value = error
+      data.value = null
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const getDaysArray = () => {
     return daysArray.value
   }
 
-  const fillGradesTable = () => {
-    const currentDate = new Date()
-    currentDate.setDate(currentDate.getDate() + gradeItemsCount.value * -1)
+  const fillGradesTable = (start) => {
+    daysArray.value = []
+    const currentDate = start ? new Date(start) : new Date()
+    console.log('currentDate: ' + currentDate)
+    const year = currentDate.getFullYear()
+    const month = currentDate.getMonth()
+    const lastDayOfMonth = new Date(year, month + 1, 0).getDate()
+
+    gradeItemsCount.value = lastDayOfMonth
+
+    currentDate.setDate(currentDate.getDate() + currentDate.getDate() * -1)
+    //currentDate.setDate(currentDate.getDate() + gradeItemsCount.value * -1)
     for (let i = 0; i < gradeItemsCount.value; i++) {
       currentDate.setDate(currentDate.getDate() + 1)
       daysArray.value.push(utils.formatDate(currentDate))
     }
-
+    console.log('daysArray: ' + daysArray.value)
     const students = []
     data.value.forEach((studentItem) => {
       const grades = []
@@ -62,6 +92,8 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
   }
 
   const dataCount = computed(() => gradeItemsCount.value)
+  const currentDay = computed(() => new Date().getDate())
+
   const filterByGradeLevel = (text) => {
     return data.value.filter((g) => g.gradeLevel.toLowerCase().includes(text))
   }
@@ -77,10 +109,12 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
   return {
     data,
     getDaysArray,
+    currentDay,
     dataCount,
     filterByGradeLevel,
     dayStrngs,
     getGradeBooks,
+    getIntervalGradeBooks,
     showModal
   }
 })

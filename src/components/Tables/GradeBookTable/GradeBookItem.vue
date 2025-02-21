@@ -1,8 +1,15 @@
 <script setup>
-defineProps({
+import { useGradeBookStore } from '@/stores/GradeBookStore.js'
+import { onMounted, ref } from 'vue'
+const gradeBookStore = useGradeBookStore()
+const props = defineProps({
   id: String,
   fullName: String,
   grades: Array
+})
+const currentDay = ref()
+onMounted(async () => {
+  currentDay.value = gradeBookStore.currentDay
 })
 </script>
 <template>
@@ -17,15 +24,15 @@ defineProps({
       :key="index"
       :class="[
         'border border-gray-200 text-sm text-gray-900',
-        index === grades.length-1 ? 'bg-indigo-100' : ''
+        index === currentDay -1 ? 'bg-indigo-100' : ''
       ]"
     >
       <input
         :type="[index !== grades.length-1 ? 'text' : 'number']"
-        id="first_product"
+        :id="'first_product'+props.fullName+index"
         :value="grade.grade"
         class="bg-gray-50 w-8 border border-gray-300 text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block"
-        :readonly="index!==grades.length-1"
+        :readonly="index!==currentDay -1"
       />
     </td>
     <td
