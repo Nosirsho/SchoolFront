@@ -1,26 +1,52 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useGradeBookStore } from '@/stores/GradeBookStore.js'
+import { useLessonStore } from '@/stores/LessonStore.js'
+
 import GradeBookItem from '&/Tables/GradeBookTable/GradeBookItem.vue'
 import MonthYearPicker from '&/MonthYearPicker/MonthYearPicker.vue'
+import utils from '@/utils/utils'
 
 const gradeBookStore = useGradeBookStore()
+const lessonStore = useLessonStore()
 
 const items = ref(gradeBookStore.data)
+const lessonData = ref()
+
 const searchInput = ref()
 const daysArray = ref([])
-const currentDay = ref()
+const currentMonthYear = ref()
+const systemDate = ref()
 
-const handleChangeDate = (date) => {
-  gradeBookStore.getIntervalGradeBooks(date)
+const selectedLesson = ref()
+
+const handleChangeDate = async (date) => {
+  currentMonthYear.value = date.substring(6, 10)
+  await gradeBookStore.getIntervalGradeBooks(date, selectedLesson.value)
+  items.value = gradeBookStore.data
+  daysArray.value = gradeBookStore.getDaysArray()
+}
+
+const handleAddCurrentDayGrade = async (studentId) => {
+  await gradeBookStore.getIntervalGradeBooks(studentId)
+  items.value = gradeBookStore.data
+}
+
+const lessonDropdownChange = async () => {
+  const date = utils.formatDate(systemDate.value)
+  await gradeBookStore.getIntervalGradeBooks(date, selectedLesson.value)
+  items.value = gradeBookStore.data
 }
 
 onMounted(async () => {
   await gradeBookStore.getGradeBooks()
   items.value = gradeBookStore.data
   daysArray.value = gradeBookStore.getDaysArray()
-  currentDay.value = gradeBookStore.currentDay
-  
+  currentMonthYear.value = utils.formatDate(gradeBookStore.systemDate)
+  systemDate.value = gradeBookStore.systemDate
+  await lessonStore.getlessons()
+  lessonData.value = lessonStore.data
+  selectedLesson.value = lessonData.value[0].id
 })
 </script>
 <template>
@@ -33,12 +59,20 @@ onMounted(async () => {
         class="w-80 m-2 p-2 rounded-lg text-sm text-gray-900 border border-blue-400 bg-gray-100 focus:border-blue-500"
         placeholder="Поиск по шаблону ФИО"
       />
-      <MonthYearPicker
-      :date="new Date()"
-      @changeDate="handleChangeDate"
-      />
+      <MonthYearPicker :date="systemDate" @changeDate="handleChangeDate" />
+      <div class="relative">
+        <select
+        @change="lessonDropdownChange"
+          v-model="selectedLesson"
+          class="w-40 m-2 p-2 rounded-lg text-sm text-gray-900 border border-blue-400 bg-gray-100 focus:border-blue-500"
+        >
+          <option v-for="lesson in lessonData" :key="lesson.id" :value="lesson.id">
+            {{ lesson.name }}
+          </option>
+        </select>
+      </div>
     </div>
-    
+
     <table>
       <thead>
         <tr>
@@ -51,11 +85,11 @@ onMounted(async () => {
             v-for="day in daysArray"
             :key="day"
             :class="[
-            'mx-2 text-lg font-medium text-center text-gray-500 uppercase border border-gray-200 bg-gray-50',
-            day.substring(8, 10) == currentDay ? 'bg-indigo-200' : '' // добавляем класс bg-red-500 только для n === 14
-          ]"
+              'mx-2 text-lg font-medium text-center text-gray-500 uppercase border border-gray-200 bg-gray-50',
+              day == currentMonthYear ? 'bg-indigo-200' : '' // добавляем класс bg-red-500 только для n === 14
+            ]"
           >
-            {{day.substring(8, 10)}}
+            {{ day.substring(8, 10) }}
           </th>
 
           <th
@@ -75,9 +109,10 @@ onMounted(async () => {
         <GradeBookItem
           v-for="(item, index) in items"
           :key="index"
-          :id="item.id"
+          :id="item.studentId"
           :full-name="item.studentFullName"
           :grades="item.grades"
+          @addCurrentDayGrade="handleAddCurrentDayGrade"
         />
         <!--End GradeBookItem-->
       </tbody>

@@ -17,7 +17,7 @@ const props = defineProps({
 })
 
 const gradeLevels = ref([])
-const selectedGradeLevel = ref([])
+const selectedGradeLevel = ref()
 const student = ref({
   firstName: '',
   lastName: '',

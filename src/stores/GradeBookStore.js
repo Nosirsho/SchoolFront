@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 import utils from '@/utils/utils'
 
 const url = 'http://localhost:5296/Gradebook/'
-//http://localhost:5296/gradebook/2025-02-01/2025-02-10
 
 export const useGradeBookStore = defineStore('gradeBook', () => {
   const data = ref([])
@@ -29,7 +28,7 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
       isLoading.value = false
     }
   }
-  const getIntervalGradeBooks = async (start) => {
+  const getIntervalGradeBooks = async (start, lessonId) => {
     const currentDate = new Date(start)
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
@@ -37,8 +36,8 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
 
     isLoading.value = true
     try {
-      const response = await utils.sendRequest('GET', url + start + '/' + end)
-
+      const response = await utils.sendRequest('GET', url + lessonId + '/' + start + '/' + end)
+      //'http://localhost:5296/gradebook/9e187c26-fd6d-459d-bfb5-c688e2b721d1/2025-02-01/2025-02-28'
       data.value = response
       fillGradesTable(start)
       error.value = null
@@ -57,7 +56,6 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
   const fillGradesTable = (start) => {
     daysArray.value = []
     const currentDate = start ? new Date(start) : new Date()
-    console.log('currentDate: ' + currentDate)
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
     const lastDayOfMonth = new Date(year, month + 1, 0).getDate()
@@ -70,7 +68,6 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
       currentDate.setDate(currentDate.getDate() + 1)
       daysArray.value.push(utils.formatDate(currentDate))
     }
-    console.log('daysArray: ' + daysArray.value)
     const students = []
     data.value.forEach((studentItem) => {
       const grades = []
@@ -81,6 +78,7 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
         studentItem.grades.forEach((gradeItem) => {
           if (dayItem === gradeItem.date) {
             grade.grade = gradeItem.grade
+            grade.id = gradeItem.id
           }
         })
         grades.push(grade)
@@ -92,27 +90,18 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
   }
 
   const dataCount = computed(() => gradeItemsCount.value)
-  const currentDay = computed(() => new Date().getDate())
+  const systemDate = computed(() => new Date())
 
   const filterByGradeLevel = (text) => {
     return data.value.filter((g) => g.gradeLevel.toLowerCase().includes(text))
   }
-  const dayStrngs = computed(
-    () =>
-      new Set(
-        data.value.flatMap((gradeLevel) => {
-          return gradeLevel.dayLessons.map((dayLesson) => dayLesson.dayString)
-        })
-      )
-  )
 
   return {
     data,
     getDaysArray,
-    currentDay,
+    systemDate,
     dataCount,
     filterByGradeLevel,
-    dayStrngs,
     getGradeBooks,
     getIntervalGradeBooks,
     showModal
