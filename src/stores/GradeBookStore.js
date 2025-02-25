@@ -12,8 +12,26 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
   const gradeItemsCount = ref()
   const daysArray = ref([])
 
+  const addCurrentDayGrade = async (data) => {
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest('POST', url, data)
+      if (response.state === 0) {
+        showModalWindow(false, response.message)
+        return
+      }
+      showModalWindow(true, 'Успешно!')
+      console.log('response: ' + response)
+      error.value = null
+    } catch (error) {
+      error.value = error
+      data.value = null
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   const getGradeBooks = async () => {
-    console.log()
     isLoading.value = true
     try {
       const response = await utils.sendRequest('GET', url)
@@ -91,17 +109,25 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
 
   const dataCount = computed(() => gradeItemsCount.value)
   const systemDate = computed(() => new Date())
+  const showModalVisible = computed(() => showModal.value.visible)
 
   const filterByGradeLevel = (text) => {
     return data.value.filter((g) => g.gradeLevel.toLowerCase().includes(text))
   }
+  const showModalWindow = (isError, msg) => {
+    showModal.value.visible = true
+    showModal.value.isError = isError
+    showModal.value.message = msg
+  }
 
   return {
     data,
+    showModalVisible,
     getDaysArray,
     systemDate,
     dataCount,
     filterByGradeLevel,
+    addCurrentDayGrade,
     getGradeBooks,
     getIntervalGradeBooks,
     showModal

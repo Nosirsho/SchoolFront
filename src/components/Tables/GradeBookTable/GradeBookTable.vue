@@ -27,9 +27,9 @@ const handleChangeDate = async (date) => {
   daysArray.value = gradeBookStore.getDaysArray()
 }
 
-const handleAddCurrentDayGrade = async (studentId) => {
-  await gradeBookStore.getIntervalGradeBooks(studentId)
-  items.value = gradeBookStore.data
+const handleAddCurrentDayGrade = async (gradeBookObj) => {
+  gradeBookObj.LessonId = selectedLesson.value
+  await gradeBookStore.addCurrentDayGrade(gradeBookObj)
 }
 
 const lessonDropdownChange = async () => {
@@ -39,13 +39,20 @@ const lessonDropdownChange = async () => {
 }
 
 onMounted(async () => {
-  await gradeBookStore.getGradeBooks()
-  items.value = gradeBookStore.data
-  daysArray.value = gradeBookStore.getDaysArray()
-  currentMonthYear.value = utils.formatDate(gradeBookStore.systemDate)
-  systemDate.value = gradeBookStore.systemDate
   await lessonStore.getlessons()
   lessonData.value = lessonStore.data
+  currentMonthYear.value = utils.formatDate(gradeBookStore.systemDate)
+  selectedLesson.value = lessonData.value[0]
+  systemDate.value = gradeBookStore.systemDate
+  systemDate.value.setDate(1)
+  const date = utils.formatDate(systemDate.value)
+  await gradeBookStore.getIntervalGradeBooks(date, selectedLesson.value.id)
+  items.value = gradeBookStore.data
+  daysArray.value = gradeBookStore.getDaysArray()
+  
+  
+  
+  
   selectedLesson.value = lessonData.value[0].id
 })
 </script>
@@ -109,7 +116,7 @@ onMounted(async () => {
         <GradeBookItem
           v-for="(item, index) in items"
           :key="index"
-          :id="item.studentId"
+          :studentId="item.studentId"
           :full-name="item.studentFullName"
           :grades="item.grades"
           @addCurrentDayGrade="handleAddCurrentDayGrade"
