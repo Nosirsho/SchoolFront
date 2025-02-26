@@ -31,6 +31,25 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
     }
   }
 
+  const deleteCurrentDayGrade = async (data) => {
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest('DELETE', url, data)
+      if (response.state === 0) {
+        showModalWindow(false, response.message)
+        return
+      }
+      showModalWindow(true, 'Успешно!')
+      console.log('response: ' + response)
+      error.value = null
+    } catch (error) {
+      error.value = error
+      data.value = null
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   const getGradeBooks = async () => {
     isLoading.value = true
     try {
@@ -123,11 +142,13 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
   return {
     data,
     showModalVisible,
+    showModalWindow,
     getDaysArray,
     systemDate,
     dataCount,
     filterByGradeLevel,
     addCurrentDayGrade,
+    deleteCurrentDayGrade,
     getGradeBooks,
     getIntervalGradeBooks,
     showModal

@@ -32,6 +32,11 @@ const handleAddCurrentDayGrade = async (gradeBookObj) => {
   await gradeBookStore.addCurrentDayGrade(gradeBookObj)
 }
 
+const handleDeleteCurrentDayGrade = async (gradeBookObj) => {
+  gradeBookObj.LessonId = selectedLesson.value
+  await gradeBookStore.deleteCurrentDayGrade(gradeBookObj)
+}
+
 const lessonDropdownChange = async () => {
   const date = utils.formatDate(systemDate.value)
   await gradeBookStore.getIntervalGradeBooks(date, selectedLesson.value)
@@ -120,6 +125,7 @@ onMounted(async () => {
           :full-name="item.studentFullName"
           :grades="item.grades"
           @addCurrentDayGrade="handleAddCurrentDayGrade"
+          @deleteCurrentDayGrade="handleDeleteCurrentDayGrade"
         />
         <!--End GradeBookItem-->
       </tbody>
