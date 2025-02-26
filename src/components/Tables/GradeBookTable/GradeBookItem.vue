@@ -18,7 +18,7 @@ onMounted(async () => {
 
 const addCurrentDayGrade = () => {
   if (currGrade.value == '' || currGrade.value == undefined) {
-    gradeBookStore.showModalWindow(false, 'Оценка не может быть пустым!')
+    gradeBookStore.showModalWindow(true, 'Оценка не может быть пустым!')
     return
   }
   const gradeBookObj = {
@@ -76,7 +76,7 @@ const handleInput = (event) => {
       <button
         @click="addCurrentDayGrade"
         type="button"
-        class="p-1 text-green-400 border-2 border-green-400 text-center hover:bg-green-500 hover:text-white focus:ring-2 focus:ring-green-300 rounded-lg text-sm text-center inline-flex items-center me-2"
+        class="p-1 text-green-400 border-2 border-green-400 text-center hover:bg-green-500 hover:text-white focus:ring-2 focus:ring-green-300 rounded-lg text-sm text-center inline-flex items-center mx-3"
       >
         <svg
           class="w-3 h-3"

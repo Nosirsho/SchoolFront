@@ -1,5 +1,5 @@
 <script setup>
-import GradeBookTable from '&/Tables/GradeBookTable/GradeBookTable.vue'
+import GradeBookTable from '@/components/Tables/GradeBookTable/GradeBookTable.vue'
 import ToastComponent from '@/components/ToastComponent/ToastComponent.vue'
 import { useGradeBookStore } from '@/stores/GradeBookStore.js'
 

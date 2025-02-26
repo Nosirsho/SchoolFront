@@ -98,17 +98,17 @@ onMounted(async () => {
             :key="day"
             :class="[
               'mx-2 text-lg font-medium text-center text-gray-500 uppercase border border-gray-200 bg-gray-50',
-              day == currentMonthYear ? 'bg-indigo-200' : '' // добавляем класс bg-red-500 только для n === 14
+              day == currentMonthYear ? 'bg-indigo-200' : ''
             ]"
           >
             {{ day.substring(8, 10) }}
           </th>
 
           <th
-            class="px-6 py-2 text-xs font-medium leading-4 text-green-500 uppercase border-b border-gray-200 bg-gray-50"
+            class="px-3 py-2 text-xs font-medium leading-4 text-green-500 uppercase border-b border-gray-200 bg-gray-50"
           >
             <button
-              class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="px-1 text-blue-400 border-2 border-blue-400 text-center hover:bg-blue-500 hover:text-white focus:ring-2 focus:ring-blue-300 rounded-lg text-sm text-center inline-flex items-center"
             >
               + Add
             </button>

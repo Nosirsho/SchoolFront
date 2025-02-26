@@ -1,8 +1,8 @@
 <script setup>
 import { useStudentStore } from '@/stores/StudentStore.js'
 
-import DashCard from '&/DashCard/DashCard.vue'
-import StudentTable from '&/Tables/StudentTable/StudentTable.vue'
+import DashCard from '@/components/DashCard/DashCard.vue'
+import StudentTable from '@/components/Tables/StudentTable/StudentTable.vue'
 import ToastComponent from '@/components/ToastComponent/ToastComponent.vue'
 
 const studentStore = useStudentStore()

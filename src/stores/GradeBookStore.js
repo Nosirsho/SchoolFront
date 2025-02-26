@@ -17,10 +17,10 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
     try {
       const response = await utils.sendRequest('POST', url, data)
       if (response.state === 0) {
-        showModalWindow(false, response.message)
+        showModalWindow(true, response.message)
         return
       }
-      showModalWindow(true, 'Успешно!')
+      showModalWindow(false, 'Успешно!')
       console.log('response: ' + response)
       error.value = null
     } catch (error) {
@@ -36,11 +36,10 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
     try {
       const response = await utils.sendRequest('DELETE', url, data)
       if (response.state === 0) {
-        showModalWindow(false, response.message)
+        showModalWindow(true, response.message)
         return
       }
-      showModalWindow(true, 'Успешно!')
-      console.log('response: ' + response)
+      showModalWindow(false, 'Успешно!')
       error.value = null
     } catch (error) {
       error.value = error
