@@ -21,7 +21,6 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
         return
       }
       showModalWindow(false, 'Успешно!')
-      console.log('response: ' + response)
       error.value = null
     } catch (error) {
       error.value = error

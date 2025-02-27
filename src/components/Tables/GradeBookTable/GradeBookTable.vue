@@ -54,12 +54,9 @@ onMounted(async () => {
   await gradeBookStore.getIntervalGradeBooks(date, selectedLesson.value.id)
   items.value = gradeBookStore.data
   daysArray.value = gradeBookStore.getDaysArray()
-  
-  
-  
-  
   selectedLesson.value = lessonData.value[0].id
 })
+
 </script>
 <template>
   <div ref="parent">
