@@ -10,54 +10,52 @@ const [parent] = useAutoAnimate()
 const sysSettingStore = useSysSettingStore()
 const items = ref([])
 
-
 const searchInput = ref()
 
 onMounted(async () => {
-    await sysSettingStore.getSysSettings()
-    items.value = sysSettingStore.data
+  await sysSettingStore.getSysSettings()
+  items.value = sysSettingStore.data
 })
 </script>
 <template>
   <div ref="parent">
-       
     <!--Search Input Start-->
     <div>
-        <div class="max-auto mx-auto rounded-lg w-1/3">
+      <div class="max-auto mx-auto rounded-lg w-1/3">
         <div class="relative">
-            <div class="mt-3 absolute inset-y-0 start-0 flex ps-3 pointer-events-none">
+          <div class="mt-3 absolute inset-y-0 start-0 flex ps-3 pointer-events-none">
             <svg
-                class="w-4 h-4 text-gray-500"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 20"
+              class="w-4 h-4 text-gray-500"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
             >
-                <path
+              <path
                 stroke="currentColor"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                />
+              />
             </svg>
-            </div>
-            <input
+          </div>
+          <input
             v-model="searchInput"
             type="search"
             id="default-search"
             class="w-full mb-2 p-2 ps-10 text-sm text-gray-900 border border-gray-300 bg-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
             placeholder='Поиск по шаблону "Фамилия Имя Отчество"'
             required
-            />
-            <button
+          />
+          <button
             @click="searchStudents"
             class="text-white absolute end-1 bottom-3 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1"
-            >
+          >
             Search
-            </button>
+          </button>
         </div>
-        </div>
+      </div>
     </div>
     <!--Search Input End-->
 
@@ -137,5 +135,4 @@ onMounted(async () => {
       </tbody>
     </table>
   </div>
-  
 </template>

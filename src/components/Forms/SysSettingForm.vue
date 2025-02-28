@@ -25,7 +25,7 @@ const saveButtonClick = () => {
     const typeId = sysSettingTypes.value.find(type => type.number == selectedTypeNumber).id
     let value = null
     if(selectedTypeNumber == 2){
-        value = intValue.value.toString();
+        value = intValue.value.toString()
     } else if(selectedTypeNumber == 3){
         value = booleanValue.value
     } else if(selectedTypeNumber == 4){

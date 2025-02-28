@@ -1,5 +1,7 @@
 <script setup>
 import { useGradeBookStore } from '@/stores/GradeBookStore.js'
+import SaveButton from '@/components/Buttons/SaveButton.vue'
+import DeleteButton from '@/components/Buttons/DeleteButton.vue'
 import { onMounted, ref } from 'vue'
 import utils from '@/utils/utils'
 const gradeBookStore = useGradeBookStore()
@@ -16,7 +18,7 @@ onMounted(async () => {
   currentMonthYear.value = utils.formatDate(gradeBookStore.systemDate)
 })
 
-const addCurrentDayGrade = () => {
+const handleSaveClickButton = () => {
   if (currGrade.value == '' || currGrade.value == undefined) {
     gradeBookStore.showModalWindow(true, 'Оценка не может быть пустым!')
     return
@@ -35,7 +37,6 @@ const deleteCurrentDayGrade = () => {
   }
   emit('deleteCurrentDayGrade', gradeBookObj)
 }
-
 
 const handleInput = (event) => {
   const input = event.target
@@ -73,52 +74,8 @@ const handleInput = (event) => {
       />
     </td>
     <td class="text-center border-b border-gray-200">
-      <button
-        @click="addCurrentDayGrade"
-        type="button"
-        class="p-1 text-green-400 border-2 border-green-400 text-center hover:bg-green-500 hover:text-white focus:ring-2 focus:ring-green-300 rounded-lg text-sm text-center inline-flex items-center mx-3"
-      >
-        <svg
-          class="w-3 h-3"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"
-            clip-rule="evenodd"
-          />
-        </svg>
-        <span class="sr-only">Checkmark</span>
-      </button>
-      <button
-        @click="deleteCurrentDayGrade"
-        type="button"
-        class="p-1 text-red-400 border-2 border-red-400 text-center hover:bg-red-500 hover:text-white focus:ring-2 focus:ring-red-300 rounded-lg text-sm text-center inline-flex items-center me-2"
-      >
-        <svg
-          class="w-3 h-3"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          viewBox="0 0 48 48"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M21.5 4.5H26.501V43.5H21.5z"
-            transform="rotate(45.001 24 24)"
-            clip-rule="evenodd"
-          />
-          <path
-            fill-rule="evenodd"
-            d="M21.5 4.5H26.5V43.501H21.5z"
-            transform="rotate(135.008 24 24)"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </button>
+      <SaveButton @on-save-click="handleSaveClickButton" />
+      <DeleteButton @on-delete-click="deleteCurrentDayGrade" />
     </td>
   </tr>
 </template>
