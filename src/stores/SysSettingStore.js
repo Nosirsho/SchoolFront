@@ -10,6 +10,13 @@ export const useSysSettingStore = defineStore('sysSetting', () => {
   const error = ref(null)
   const showModal = ref([])
   const isLoading = ref(false)
+  //Форма
+  const formVisible = ref()
+  const isEdit = ref(false)
+  const currItemId = ref()
+  const currentItemObj = ref([])
+  //
+
   const showModalVisible = computed(() => showModal.value.visible)
 
   const getSysSettingType = async () => {
@@ -66,6 +73,42 @@ export const useSysSettingStore = defineStore('sysSetting', () => {
     }
   }
 
+  const updateSysSettingValue = async (data) => {
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest('PUT', url + currItemId.value, data)
+      if (response.state === 0) {
+        showModalWindow(true, response.message)
+        return
+      }
+      showModalWindow(false, 'Успешно!')
+      sysSettingTypesList.value = response
+      error.value = null
+    } catch (error) {
+      error.value = error
+      sysSettingTypesList.value = null
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const getSysSettingById = async (id) => {
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest('GET', url + id)
+      if (response.state === 0) {
+        showModalWindow(true, response.message)
+        return
+      }
+      currentItemObj.value = response
+    } catch (error) {
+      error.value = error
+      sysSettingTypesList.value = null
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   const showModalWindow = (isError, msg) => {
     showModal.value.visible = true
     showModal.value.isError = isError
@@ -79,7 +122,13 @@ export const useSysSettingStore = defineStore('sysSetting', () => {
     showModalWindow,
     showModal,
     getSysSettingType,
+    getSysSettingById,
     setSysSettingValue,
-    getSysSettings
+    updateSysSettingValue,
+    getSysSettings,
+    formVisible,
+    isEdit,
+    currItemId,
+    currentItemObj
   }
 })

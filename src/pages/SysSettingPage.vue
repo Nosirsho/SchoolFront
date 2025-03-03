@@ -9,7 +9,6 @@ const sysSettingStore = useSysSettingStore()
 const handleOkButtonClick = () => {
   sysSettingStore.showModal.visible = false
 }
-
 </script>
 <template>
   <ToastComponent
@@ -18,8 +17,8 @@ const handleOkButtonClick = () => {
     :meesage="sysSettingStore.showModal.message"
     @okButtonClick="handleOkButtonClick"
   />
-  <SysSettingCrEdForm/>
+  <SysSettingCrEdForm v-if="sysSettingStore.formVisible" :isEdit="sysSettingStore.isEdit" />
   <div class="container m-2">
-    <SysSettingTable/>
+    <SysSettingTable />
   </div>
 </template>

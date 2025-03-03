@@ -12,6 +12,12 @@ const items = ref([])
 
 const searchInput = ref()
 
+const handleEditButtonClick = () => {}
+
+const addButtonClick = () => {
+  sysSettingStore.formVisible = true
+  sysSettingStore.isEdit = false
+}
 onMounted(async () => {
   await sysSettingStore.getSysSettings()
   items.value = sysSettingStore.data
@@ -106,8 +112,8 @@ onMounted(async () => {
             class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-right text-green-500 uppercase border-b border-gray-200 bg-gray-50"
           >
             <button
-              @click="openAddForm"
-              class="px-4 py-2 bg-blue-500 rounded-md font-semibold text-xs text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="px-1 text-blue-400 border-2 border-blue-400 text-center hover:bg-blue-500 hover:text-white focus:ring-2 focus:ring-blue-300 rounded-lg text-sm text-center inline-flex items-center"
+              @click="addButtonClick"
             >
               + Add
             </button>
@@ -128,8 +134,7 @@ onMounted(async () => {
           :dateValue="item.dateValue"
           :stringValue="item.stringValue"
           :guidValue="item.guidValue"
-          @addCurrentDayGrade="handleAddCurrentDayGrade"
-          @deleteCurrentDayGrade="handleDeleteCurrentDayGrade"
+          @editButtonClick="handleEditButtonClick"
         />
         <!--End StudentTableItem-->
       </tbody>

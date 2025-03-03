@@ -8,31 +8,78 @@ const sysSettingStore = useSysSettingStore()
 const sysSettingTypes = ref([])
 const selectedSysSettingType = ref()
 
-const datepickerValue = ref()
-const props = defineProps({
-  isEdit: Boolean,
-  Name: String
+const prop = defineProps({
+  isEdit: Boolean
 })
-const sysSettingObj = ref({
-  id: '1',
-  name: 'Name',
-  code: 'Code',
-  type: 'Type',
-  integerValue: 1,
-  stringValue: 'StringVal',
-  dateValue: '2025-02-22',
-  booleanValue: true,
-  guidValue: 'd7fe027c-2084-4a88-bf71-fb8989887c7e'
-})
+// const sysSettingObj = ref({
+//   id: '1',
+//   name: 'Name',
+//   code: 'Code',
+//   type: 'Type',
+//   integerValue: 1,
+//   stringValue: 'StringVal',
+//   dateValue: '2025-02-22',
+//   booleanValue: true,
+//   guidValue: 'd7fe027c-2084-4a88-bf71-fb8989887c7e'
+// })
 
-const codeValue = ref()
+const name = ref()
+const code = ref()
+
+const datepickerValue = ref()
 const booleanValue = ref()
 const textValue = ref()
 const intValue = ref()
+
 const selectedSysSettingTypeNumber = computed(() => selectedSysSettingType.value)
+
+const onBackButtonClick = () => {
+  sysSettingStore.formVisible = false
+}
+const onButtonClick = () => {
+  if (!selectedSysSettingType.value) {
+    console.log('Error')
+    return
+  }
+  const selectedTypeNumber = selectedSysSettingTypeNumber.value
+  const typeId = sysSettingTypes.value.find((type) => type.number == selectedTypeNumber).id
+  let value = null
+  if (selectedTypeNumber == 2) {
+    value = intValue.value.toString()
+  } else if (selectedTypeNumber == 3) {
+    value = booleanValue.value
+  } else if (selectedTypeNumber == 4) {
+    value = utils.formatDate(datepickerValue.value)
+  } else {
+    value = textValue.value
+  }
+  const data = {
+    name: name.value,
+    code: code.value,
+    typeId: typeId,
+    value: value
+  }
+  if (prop.isEdit) {
+    sysSettingStore.updateSysSettingValue(data)
+  } else {
+    sysSettingStore.setSysSettingValue(data)
+  }
+}
+
 onMounted(async () => {
   await sysSettingStore.getSysSettingType()
   sysSettingTypes.value = sysSettingStore.sysSettingTypesList
+  if (prop.isEdit) {
+    await sysSettingStore.getSysSettingById(sysSettingStore.currItemId)
+
+    name.value = sysSettingStore.currentItemObj.name
+    code.value = sysSettingStore.currentItemObj.code
+    booleanValue.value = sysSettingStore.currentItemObj.booleanValue
+    textValue.value = sysSettingStore.currentItemObj.stringValue
+    intValue.value = sysSettingStore.currentItemObj.integerValue
+    datepickerValue.value = new Date(sysSettingStore.currentItemObj.dateValue)
+    selectedSysSettingType.value = sysSettingStore.currentItemObj.typeNumber
+  }
 })
 </script>
 
@@ -41,11 +88,12 @@ onMounted(async () => {
   <div class="bg-gray-900 w-1/3 h-full fixed right-0 top-0 z-30 p-4">
     <button
       type="button"
-      class="text-center m-2 p-2 text-gray-800 bg-gray-700 border border-gray-600 hover:bg-gray-800 rounded-lg focus:ring-2 focus:ring-blue-300"
+      class="text-center m-2 p-2 text-gray-800 bg-gray-700 border border-gray-300 hover:bg-gray-800 rounded-lg focus:ring-2 focus:ring-blue-300"
+      @click="onBackButtonClick"
     >
       <svg class="w-15 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 10">
         <path
-          stroke="rgb(1 163 175)"
+          stroke="rgb(13 148 136)"
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
@@ -57,11 +105,12 @@ onMounted(async () => {
     <form class="w-full m-2">
       <div class="grid grid-cols-8 mb-2">
         <div
-          class="col-span-2 bg-gray-700 text-gray-400 text-sm border border-gray-600 rounded-l-lg"
+          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
         >
           <p class="p-2.5">Наименование</p>
         </div>
         <input
+          v-model="name"
           type="text"
           class="col-span-6 shadow-sm bg-gray-800 border border-gray-600 text-gray-200 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           placeholder="Наименование"
@@ -71,13 +120,13 @@ onMounted(async () => {
 
       <div class="grid grid-cols-8 mb-2">
         <div
-          class="col-span-2 bg-gray-700 text-gray-400 text-sm border border-gray-600 rounded-l-lg"
+          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
         >
           <p class="p-2.5">Код</p>
         </div>
         <input
           type="text"
-          v-model="codeValue"
+          v-model="code"
           class="col-span-6 shadow-sm bg-gray-800 border border-gray-600 text-gray-200 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           placeholder="Код"
           required
@@ -86,7 +135,7 @@ onMounted(async () => {
 
       <div class="grid grid-cols-8 mb-2">
         <div
-          class="col-span-2 bg-gray-700 text-gray-400 font-medium text-sm border border-gray-600 rounded-l-lg"
+          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
         >
           <p class="p-2.5">Тип</p>
         </div>
@@ -103,7 +152,7 @@ onMounted(async () => {
 
       <div v-if="selectedSysSettingTypeNumber == 4" class="grid grid-cols-8 mb-2">
         <div
-          class="col-span-2 bg-gray-700 text-gray-400 text-sm border border-gray-600 rounded-l-lg"
+          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
         >
           <p class="p-2.5">Значение</p>
         </div>
@@ -115,7 +164,7 @@ onMounted(async () => {
 
       <div v-else-if="selectedSysSettingTypeNumber == 3" class="grid grid-cols-8 mb-2">
         <div
-          class="col-span-2 bg-gray-700 text-gray-400 text-sm border border-gray-600 rounded-l-lg"
+          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
         >
           <p class="p-2.5">Значение</p>
         </div>
@@ -132,7 +181,7 @@ onMounted(async () => {
 
       <div v-else-if="selectedSysSettingTypeNumber == 2" class="grid grid-cols-8 mb-2">
         <div
-          class="col-span-2 bg-gray-700 text-gray-400 text-sm border border-gray-600 rounded-l-lg"
+          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
         >
           <p class="p-2.5">Значение</p>
         </div>
@@ -146,7 +195,7 @@ onMounted(async () => {
 
       <div v-else class="grid grid-cols-8 mb-2">
         <div
-          class="col-span-2 bg-gray-700 text-gray-400 text-sm border border-gray-600 rounded-l-lg"
+          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
         >
           <p class="p-2.5">Значение</p>
         </div>
@@ -157,11 +206,15 @@ onMounted(async () => {
           required
         />
       </div>
-
-      <button
-        @click.prevent="toggleStudentEvent"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-      ></button>
+      <div class="text-right">
+        <button
+          @click="onButtonClick"
+          type="button"
+          class="text-center mt-2 p-1.5 text-teal-600 font-bold bg-gray-700 border border-gray-300 hover:bg-gray-800 rounded-lg focus:ring-2 focus:ring-blue-300"
+        >
+          {{ prop.isEdit ? 'Изменить' : 'Сохранить' }}
+        </button>
+      </div>
     </form>
   </div>
 </template>
