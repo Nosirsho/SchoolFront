@@ -7,11 +7,11 @@ const props = defineProps({
 const emit = defineEmits(['okButtonClick'])
 </script>
 <template>
-  <div id="toast-container" class="fixed top-0 left-0 w-full h-full z-10 bg-gray-400 opacity-90">
+  <div id="toast-container" class="fixed top-0 left-0 w-full h-full z-50 bg-gray-400 opacity-90">
     <div
       id="toast-simple"
       :class="[
-        'fixed top-1/3 right-1/3 z-30 content-center w-full h-1/6 max-w-lg p-4 text-gray-700 bg-gray-100 rounded-lg shadow-sm border-4',
+        'fixed top-1/3 right-1/3 z-50 content-center w-full h-1/6 max-w-lg p-4 text-gray-700 bg-gray-100 rounded-lg shadow-sm border-4',
         isError ? 'border-red-500' : 'border-green-500'
       ]"
       role="alert"
@@ -51,7 +51,7 @@ const emit = defineEmits(['okButtonClick'])
             @click="emit('okButtonClick')"
             type="button"
             :class="[
-              'border-2 focus:ring-4 hover:text-white focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center',
+              'mx-2 border-2 focus:ring-4 hover:text-white focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center',
               isError
                 ? 'border-red-700 hover:bg-red-800 focus:ring-red-300 text-red-700'
                 : 'border-green-700 hover:bg-green-800 focus:ring-green-300 text-green-700'

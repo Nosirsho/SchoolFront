@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useGradeBookStore } from '@/stores/GradeBookStore.js'
 import { useLessonStore } from '@/stores/LessonStore.js'
+import { useSysSettingStore } from '@/stores/SysSettingStore'
 
 import GradeBookItem from '&/Tables/GradeBookTable/GradeBookItem.vue'
 import MonthYearPicker from '&/MonthYearPicker/MonthYearPicker.vue'
@@ -9,6 +10,7 @@ import utils from '@/utils/utils'
 
 const gradeBookStore = useGradeBookStore()
 const lessonStore = useLessonStore()
+const sysSettingStore = useSysSettingStore()
 
 const items = ref(gradeBookStore.data)
 const lessonData = ref()
@@ -17,6 +19,7 @@ const searchInput = ref()
 const daysArray = ref([])
 const currentMonthYear = ref()
 const systemDate = ref()
+const operDay = ref()
 
 const selectedLesson = ref()
 
@@ -45,10 +48,12 @@ const lessonDropdownChange = async () => {
 
 onMounted(async () => {
   await lessonStore.getlessons()
+  const operDayString = ref(await sysSettingStore.getSysSettingByCode('OPER_DAY'))
+  operDay.value = new Date(operDayString.value)
   lessonData.value = lessonStore.data
-  currentMonthYear.value = utils.formatDate(gradeBookStore.systemDate)
+  currentMonthYear.value = operDayString.value
   selectedLesson.value = lessonData.value[0]
-  systemDate.value = gradeBookStore.systemDate
+  systemDate.value = new Date(operDay.value)
   systemDate.value.setDate(1)
   const date = utils.formatDate(systemDate.value)
   await gradeBookStore.getIntervalGradeBooks(date, selectedLesson.value.id)
@@ -56,7 +61,6 @@ onMounted(async () => {
   daysArray.value = gradeBookStore.getDaysArray()
   selectedLesson.value = lessonData.value[0].id
 })
-
 </script>
 <template>
   <div ref="parent">
@@ -71,7 +75,7 @@ onMounted(async () => {
       <MonthYearPicker :date="systemDate" @changeDate="handleChangeDate" />
       <div class="relative">
         <select
-        @change="lessonDropdownChange"
+          @change="lessonDropdownChange"
           v-model="selectedLesson"
           class="w-40 m-2 p-2 rounded-lg text-sm text-gray-900 border border-blue-400 bg-gray-100 focus:border-blue-500"
         >
@@ -121,6 +125,7 @@ onMounted(async () => {
           :studentId="item.studentId"
           :full-name="item.studentFullName"
           :grades="item.grades"
+          :operDay="operDay"
           @addCurrentDayGrade="handleAddCurrentDayGrade"
           @deleteCurrentDayGrade="handleDeleteCurrentDayGrade"
         />

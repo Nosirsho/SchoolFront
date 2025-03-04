@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onUpdated } from 'vue'
 import utils from '@/utils/utils'
 
 const props = defineProps({
@@ -11,8 +11,9 @@ const props = defineProps({
 const emit = defineEmits(['changeDate'])
 
 const monthYearValue = ref()
-onMounted(async () => {
-  monthYearValue.value = utils.formatDate(new Date()).substring(0, 7)
+
+onUpdated(async () => {
+  monthYearValue.value = utils.formatDate(props.date).substring(0, 7)
 })
 
 const addMonth = () => {

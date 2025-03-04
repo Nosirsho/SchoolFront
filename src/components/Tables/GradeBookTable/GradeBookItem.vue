@@ -8,14 +8,15 @@ const gradeBookStore = useGradeBookStore()
 const props = defineProps({
   studentId: String,
   fullName: String,
-  grades: Array
+  grades: Array,
+  operDay: Date
 })
 const currGrade = ref()
 const emit = defineEmits(['addCurrentDayGrade'])
-const currentMonthYear = ref()
+const currentMonthYear = ref(utils.formatDate(props.operDay))
 
 onMounted(async () => {
-  currentMonthYear.value = utils.formatDate(gradeBookStore.systemDate)
+  //currentMonthYear.value = utils.formatDate(gradeBookStore.systemDate)
 })
 
 const handleSaveClickButton = () => {

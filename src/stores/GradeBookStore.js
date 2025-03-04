@@ -10,7 +10,7 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
   const showModal = ref([])
   const isLoading = ref(false)
   const gradeItemsCount = ref()
-  const daysArray = ref([])
+  const daysArray = ref([]) // массив для хранения дней месяца
 
   const addCurrentDayGrade = async (data) => {
     isLoading.value = true
@@ -72,7 +72,6 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
     isLoading.value = true
     try {
       const response = await utils.sendRequest('GET', url + lessonId + '/' + start + '/' + end)
-      //'http://localhost:5296/gradebook/9e187c26-fd6d-459d-bfb5-c688e2b721d1/2025-02-01/2025-02-28'
       data.value = response
       fillGradesTable(start)
       error.value = null
@@ -98,7 +97,7 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
     gradeItemsCount.value = lastDayOfMonth
 
     currentDate.setDate(currentDate.getDate() + currentDate.getDate() * -1)
-    //currentDate.setDate(currentDate.getDate() + gradeItemsCount.value * -1)
+
     for (let i = 0; i < gradeItemsCount.value; i++) {
       currentDate.setDate(currentDate.getDate() + 1)
       daysArray.value.push(utils.formatDate(currentDate))

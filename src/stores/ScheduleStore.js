@@ -81,10 +81,34 @@ export const useScheduleStore = defineStore('schedule', () => {
     console.log(data.value)
   }
 
+  function processSchedule(schedules) {
+    return schedules
+      .map((grade) => {
+        const updatedDayLessons = grade.dayLessons
+          .map((day) => {
+            const updatedLessonNumbers = day.lessonNumbers.filter(
+              (lesson) => lesson.lessonId !== '00000000-0000-0000-0000-000000000000'
+            )
+            return {
+              ...day,
+              lessonNumbers: updatedLessonNumbers
+            }
+          })
+          .filter((day) => day.lessonNumbers.length > 0) // Remove empty dayLessons
+
+        return {
+          ...grade,
+          dayLessons: updatedDayLessons
+        }
+      })
+      .filter((grade) => grade.dayLessons.length > 0) // Remove grades with empty dayLessons
+  }
+
   const addScheduleList = async () => {
     isLoading.value = true
     try {
-      await axios.post(`${url}`, data.value)
+      const sendData = processSchedule(data.value)
+      await axios.post(`${url}`, sendData)
       error.value = null
     } catch (error) {
       error.value = error

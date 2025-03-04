@@ -109,6 +109,24 @@ export const useSysSettingStore = defineStore('sysSetting', () => {
     }
   }
 
+  const getSysSettingByCode = async (code) => {
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest('GET', url + code)
+      if (response.state === 0) {
+        showModalWindow(true, response.message)
+        return
+      }
+      isLoading.value = false
+      return response
+    } catch (error) {
+      error.value = error
+      sysSettingTypesList.value = null
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   const showModalWindow = (isError, msg) => {
     showModal.value.visible = true
     showModal.value.isError = isError
@@ -123,6 +141,7 @@ export const useSysSettingStore = defineStore('sysSetting', () => {
     showModal,
     getSysSettingType,
     getSysSettingById,
+    getSysSettingByCode,
     setSysSettingValue,
     updateSysSettingValue,
     getSysSettings,
