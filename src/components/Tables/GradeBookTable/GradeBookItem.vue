@@ -1,10 +1,12 @@
 <script setup>
 import { useGradeBookStore } from '@/stores/GradeBookStore.js'
+import { useSysSettingStore } from '@/stores/SysSettingStore'
 import SaveButton from '@/components/Buttons/SaveButton.vue'
 import DeleteButton from '@/components/Buttons/DeleteButton.vue'
 import { onMounted, ref } from 'vue'
-import utils from '@/utils/utils'
 const gradeBookStore = useGradeBookStore()
+const sysSettingStore = useSysSettingStore()
+
 const props = defineProps({
   studentId: String,
   fullName: String,
@@ -13,10 +15,10 @@ const props = defineProps({
 })
 const currGrade = ref()
 const emit = defineEmits(['addCurrentDayGrade'])
-const currentMonthYear = ref(utils.formatDate(props.operDay))
+const currentMonthYear = ref()
 
 onMounted(async () => {
-  //currentMonthYear.value = utils.formatDate(gradeBookStore.systemDate)
+  currentMonthYear.value = sysSettingStore.operDate
 })
 
 const handleSaveClickButton = () => {
@@ -34,7 +36,7 @@ const handleSaveClickButton = () => {
 const deleteCurrentDayGrade = () => {
   const gradeBookObj = {
     StudentId: props.studentId,
-    Date: currentMonthYear.value
+    Date: currentMonthYear.value,
   }
   emit('deleteCurrentDayGrade', gradeBookObj)
 }

@@ -10,6 +10,7 @@ export const useSysSettingStore = defineStore('sysSetting', () => {
   const error = ref(null)
   const showModal = ref([])
   const isLoading = ref(false)
+  const operDate = ref()
   //Форма
   const formVisible = ref()
   const isEdit = ref(false)
@@ -145,6 +146,7 @@ export const useSysSettingStore = defineStore('sysSetting', () => {
     setSysSettingValue,
     updateSysSettingValue,
     getSysSettings,
+    operDate,
     formVisible,
     isEdit,
     currItemId,

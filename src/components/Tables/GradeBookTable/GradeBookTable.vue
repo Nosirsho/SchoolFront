@@ -49,6 +49,7 @@ const lessonDropdownChange = async () => {
 onMounted(async () => {
   await lessonStore.getlessons()
   const operDayString = ref(await sysSettingStore.getSysSettingByCode('OPER_DAY'))
+  sysSettingStore.operDate = operDayString
   operDay.value = new Date(operDayString.value)
   lessonData.value = lessonStore.data
   currentMonthYear.value = operDayString.value
