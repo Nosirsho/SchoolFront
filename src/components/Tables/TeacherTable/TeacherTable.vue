@@ -115,33 +115,33 @@ onMounted(async () => {
 
     <table class="min-w-full">
       <thead>
-        <tr>
+        <tr class="border-2 border-gray-300 bg-gray-100">
           <th
-            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+            class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase"
           >
             ФИО
           </th>
           <th
-            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+            class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase"
           >
             Дата рожд
           </th>
           <th
-            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+            class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase"
           >
             Телефон
           </th>
           <th
-            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+            class="px-6 py-1 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase"
           >
             Пол
           </th>
           <th
-            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-green-500 uppercase border-b border-gray-200 bg-gray-50"
+            class="px-4 py-1 text-xs font-medium leading-4 tracking-wider text-right text-green-500 uppercase"
           >
             <button
               @click="openAddForm"
-              class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="px-1 text-blue-400 border-2 border-blue-400 text-center hover:bg-blue-500 hover:text-white focus:ring-2 focus:ring-blue-300 rounded-lg text-sm text-center inline-flex items-center"
             >
               + Add
             </button>
