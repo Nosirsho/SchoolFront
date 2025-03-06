@@ -11,6 +11,7 @@ import StudentPage from './pages/StudentPage.vue'
 import SchedulePage from '@/pages/SchedulePage.vue'
 import GradeBookPage from './pages/GradeBookPage.vue'
 import SysSettingPage from './pages/SysSettingPage.vue'
+import ParentPage from './pages/ParentPage.vue'
 
 const routes = [
   { path: '/students', name: 'StudentPage', component: StudentPage },
@@ -18,6 +19,7 @@ const routes = [
   { path: '/schedules', name: 'SchedulePage', component: SchedulePage },
   { path: '/gradebooks', name: 'GradeBookPage', component: GradeBookPage },
   { path: '/syssettings', name: 'SysSettingPage', component: SysSettingPage },
+  { path: '/parents', name: 'ParentPage', component: ParentPage },
 ]
 const router = createRouter({
   history: createWebHistory(),

@@ -48,6 +48,9 @@ const sidebarOpen = ref(false)
       <RouterLink to="/syssettings">
         <SidebarItem title="SysSetting" />
       </RouterLink>
+      <RouterLink to="/parents">
+        <SidebarItem title="Parent" />
+      </RouterLink>
     </nav>
   </div>
 </template>
