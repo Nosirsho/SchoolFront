@@ -2,11 +2,22 @@
 import { useStudentStore } from '@/stores/StudentStore.js'
 import ToastComponent from '@/components/ToastComponent/ToastComponent.vue'
 import ParentTable from '@/components/Tables/ParentTable/ParentTable.vue';
+//import ParentCrEdForm from '@/components/Forms/ParentCrEdForm.vue';
+import TestForm from '@/components/Forms/TestForm.vue';
+
 const studentStore = useStudentStore()
 
 const handleOkButtonClick = () => {
   studentStore.showModal.visible = false
 }
+
+// const parent = {
+//   firstName: 'firstName',
+//   lastName: 'lastName',
+//   middleName: 'middleName',
+//   sex: 0,
+//   phone: '92-992-92-92'
+// }
 </script>
 <template>
   <ToastComponent
@@ -15,6 +26,7 @@ const handleOkButtonClick = () => {
     :meesage="studentStore.showModal.message"
     @okButtonClick="handleOkButtonClick"
   />
+  <TestForm/>
   <div class="container px-6 py-8 mx-auto">
     <h3 class="text-3xl font-medium text-gray-700">Parents</h3>
     <div class="flex flex-col mt-1">
