@@ -1,32 +1,25 @@
 <script setup>
-import { useStudentStore } from '@/stores/StudentStore.js'
+import { useParentStore } from '@/stores/ParentStore.js'
 import ToastComponent from '@/components/ToastComponent/ToastComponent.vue'
-import ParentTable from '@/components/Tables/ParentTable/ParentTable.vue';
+import ParentTable from '@/components/Tables/ParentTable/ParentTable.vue'
 //import ParentCrEdForm from '@/components/Forms/ParentCrEdForm.vue';
-import TestForm from '@/components/Forms/TestForm.vue';
+//import TestForm from '@/components/Forms/TestForm.vue';
+import ParentCrEdForm from '@/components/Forms/ParentCrEdForm.vue'
 
-const studentStore = useStudentStore()
+const parentStore = useParentStore()
 
 const handleOkButtonClick = () => {
-  studentStore.showModal.visible = false
+  parentStore.showModal.visible = false
 }
-
-// const parent = {
-//   firstName: 'firstName',
-//   lastName: 'lastName',
-//   middleName: 'middleName',
-//   sex: 0,
-//   phone: '92-992-92-92'
-// }
 </script>
 <template>
   <ToastComponent
-    v-if="studentStore.showModalVisible"
-    :isError="studentStore.showModal.isError"
-    :meesage="studentStore.showModal.message"
+    v-if="parentStore.showModalVisible"
+    :isError="parentStore.showModal.isError"
+    :meesage="parentStore.showModal.message"
     @okButtonClick="handleOkButtonClick"
   />
-  <TestForm/>
+  <ParentCrEdForm v-if="parentStore.formVisible" :isEdit="parentStore.isEdit"/>
   <div class="container px-6 py-8 mx-auto">
     <h3 class="text-3xl font-medium text-gray-700">Parents</h3>
     <div class="flex flex-col mt-1">
@@ -35,7 +28,7 @@ const handleOkButtonClick = () => {
           class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-400 shadow sm:rounded-lg"
         >
           <!--ParentTable-->
-          <ParentTable/>
+          <ParentTable />
           <!--End ParentTable-->
         </div>
       </div>

@@ -1,12 +1,23 @@
 <script setup>
 import DeleteButton from '@/components/Buttons/DeleteButton.vue'
 import EditButton from '@/components/Buttons/EditButton.vue'
-defineProps({
+import { useParentStore } from '@/stores/ParentStore'
+
+const parentStore = useParentStore()
+
+const prop = defineProps({
   id: String,
   fullName: String,
   sex: String,
   phone: String
 })
+
+const handleEditButtonClick = () => {
+  parentStore.formVisible = true
+  parentStore.isEdit = true
+  parentStore.currItemId = prop.id
+}
+
 </script>
 <template>
   <tr class="hover:bg-slate-100">
@@ -26,7 +37,7 @@ defineProps({
       {{ phone }}
     </td>
     <td class="text-center border-b border-gray-200 border-l-2">
-      <EditButton class="mx-1" @on-edit-click="emit('selectedEditStudent', id)" />
+      <EditButton class="mx-1" @on-edit-click="handleEditButtonClick" />
       <DeleteButton class="mx-1" @on-delete-click="emit('deleteSelectedStudent', id)" />
     </td>
   </tr>

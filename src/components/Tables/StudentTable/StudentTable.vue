@@ -35,8 +35,7 @@ const handleCloseAddForm = () => {
 }
 
 const searchStudents = async () => {
-  const params = { search: searchInput.value }
-  await studentStore.searchByName(params)
+  await studentStore.searchByName(searchInput.value)
   items.value = studentStore.data
 }
 
@@ -53,7 +52,7 @@ onMounted(async () => {
       :isEdit="isEdit"
       v-if="isVisibleForm"
     />
-    
+
     <!--Search Input Start-->
     <div class="max-auto mx-auto">
       <label
@@ -150,5 +149,4 @@ onMounted(async () => {
       </tbody>
     </table>
   </div>
-  
 </template>

@@ -7,6 +7,11 @@ import ParentTableItem from './ParentTableItem.vue'
 const parentStore = useParentStore()
 const items = ref([])
 
+const openAddForm = () => {
+  parentStore.formVisible = true
+  parentStore.isEdit = false
+}
+
 onMounted(async () => {
   await parentStore.getParentsList()
   items.value = parentStore.data
@@ -14,13 +19,6 @@ onMounted(async () => {
 </script>
 <template>
   <div ref="parent">
-    <!-- <StudentEditForm
-      @closeAddForm="handleCloseAddForm"
-      :editStudentId="editStudentId"
-      :isEdit="isEdit"
-      v-if="isVisibleForm"
-    /> -->
-
     <!--Search Input Start-->
     <div class="max-auto mx-auto">
       <label
@@ -100,6 +98,7 @@ onMounted(async () => {
         <ParentTableItem
           v-for="item in items"
           :key="item.id"
+          :id="item.id"
           :fullName="item.fullName"
           :sex="item.sex"
           :phone="item.phone"

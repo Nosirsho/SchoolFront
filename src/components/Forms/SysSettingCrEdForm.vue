@@ -11,17 +11,6 @@ const selectedSysSettingType = ref()
 const prop = defineProps({
   isEdit: Boolean
 })
-// const sysSettingObj = ref({
-//   id: '1',
-//   name: 'Name',
-//   code: 'Code',
-//   type: 'Type',
-//   integerValue: 1,
-//   stringValue: 'StringVal',
-//   dateValue: '2025-02-22',
-//   booleanValue: true,
-//   guidValue: 'd7fe027c-2084-4a88-bf71-fb8989887c7e'
-// })
 
 const name = ref()
 const code = ref()

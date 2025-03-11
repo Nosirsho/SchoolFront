@@ -1,6 +1,13 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 //import utils from '@/utils/utils.js'
+import { useStudentStore } from '@/stores/StudentStore.js'
+import SelectFilter from '../Items/SelectFilter.vue'
+import { useParentStore } from '@/stores/ParentStore'
+
+const studentStore = useStudentStore()
+const parentStore = useParentStore()
+const selectedStudent = ref()
 
 const parent = ref({
   firstName: '',
@@ -9,14 +16,55 @@ const parent = ref({
   sex: 0,
   phone: ''
 })
+const prop = defineProps({
+  isEdit: Boolean
+})
+
+const studentData = ref([])
+const onChangeHandle = async (query) => {
+  await studentStore.searchByName(query)
+  studentData.value = studentStore.data
+}
+const closeForm = () => {
+  parentStore.formVisible = false
+}
+
+const saveEditButtonClick = async () => {
+  const data = {
+    firstName: parent.value.firstName,
+    lastName: parent.value.lastName,
+    middleName: parent.value.middleName,
+    sex: parseInt(parent.value.sex),
+    phone: parent.value.phone,
+    studentId: selectedStudent.value
+  }
+  if (!prop.isEdit) {
+    await parentStore.createParent(data)
+  } else {
+    data.id = parentStore.currItemId
+    await parentStore.editParent(data.id, data)
+  }
+}
+
+onMounted(async () => {
+  if (prop.isEdit) {
+    await parentStore.getParentById(parentStore.currItemId)
+    parent.value.firstName = parentStore.currentItemObj.firstName
+    parent.value.lastName = parentStore.currentItemObj.lastName
+    parent.value.middleName = parentStore.currentItemObj.middleName
+    parent.value.sex = parentStore.currentItemObj.sex
+    parent.value.phone = parentStore.currentItemObj.phone
+  } else {
+    console.log('new')
+  }
+})
 </script>
 
 <template>
   <div class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-60"></div>
   <div class="bg-gray-900 w-1/4 h-full fixed right-0 top-0 z-30 p-4">
     <button
-      @click.prevent="() => emit('closeAddForm')"
-      type="submit"
+      @click="closeForm"
       class="text-center m-2 p-2 text-gray-800 bg-gray-700 border border-gray-300 hover:bg-gray-800 rounded-lg focus:ring-2 focus:ring-blue-300"
     >
       <svg class="w-15 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 10">
@@ -111,9 +159,17 @@ const parent = ref({
         />
       </div>
 
+      <SelectFilter
+        v-if="!isEdit"
+        :data="studentData"
+        caption="Студент"
+        @on-change="onChangeHandle"
+        v-model="selectedStudent"
+      />
+
       <div class="text-right">
         <button
-          @click.prevent="SaveEditButtonClick"
+          @click.prevent="saveEditButtonClick"
           class="text-center mt-2 p-1.5 text-teal-600 font-bold bg-gray-700 border border-gray-300 hover:bg-gray-800 rounded-lg focus:ring-2 focus:ring-blue-300"
         >
           {{ isEdit ? 'Изменить' : 'Добавить' }}

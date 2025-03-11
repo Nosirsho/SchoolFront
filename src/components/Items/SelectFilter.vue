@@ -1,20 +1,34 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-const data = [
-  'Авезов',
-  'Баранов',
-  'Вакилов',
-  'Гаратов',
-  'Дастунов',
-  'Егоров',
-  'Париев',
-  'Литров',
-  'Растаров'
-]
-const filteredItems = ref(data)
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+// const data = [
+//   'Авезов',
+//   'Баранов',
+//   'Вакилов',
+//   'Гаратов',
+//   'Дастунов',
+//   'Егоров',
+//   'Париев',
+//   'Литров',
+//   'Растаров'
+// ]
+const modelValue = defineModel()
+const updateModelValue = (value) => {
+  modelValue.value = value
+}
+
+const props = defineProps({
+  data: Array,
+  caption: String
+})
+const filteredItems = computed(() => {
+  return props.data.filter((option) =>
+    option.fullName.toLowerCase().includes(inputText.value.toLowerCase())
+  )
+})
 const inputText = ref()
 const listVisible = ref(false)
 const selectedIndex = ref(-1)
+const emit = defineEmits(['onChange'])
 
 const handleKeyDown = (event) => {
   if (listVisible.value) {
@@ -25,9 +39,9 @@ const handleKeyDown = (event) => {
       event.preventDefault()
       selectedIndex.value = Math.max(selectedIndex.value - 1, 0)
     } else if (event.key === 'Escape') {
-    listVisible.value = false;
-    selectedIndex.value = -1;
-  } else if (event.key === 'Enter') {
+      listVisible.value = false
+      selectedIndex.value = -1
+    } else if (event.key === 'Enter') {
       event.preventDefault()
       if (selectedIndex.value >= 0 && selectedIndex.value < filteredItems.value.length) {
         onItemClick(filteredItems.value[selectedIndex.value])
@@ -37,26 +51,24 @@ const handleKeyDown = (event) => {
 }
 
 const onItemClick = (item) => {
-  inputText.value = item
+  inputText.value = item.fullName
+  updateModelValue(item.id)
   listVisible.value = false
 }
 const showList = () => {
   listVisible.value = true
 }
-const onChange = (query) => {
+const onChange = async (query) => {
+  emit('onChange', query)
   if (query == '') {
-    filteredItems.value = data
+    updateModelValue(query)
   }
-  filteredItems.value = data.filter((item) => item.toLowerCase().includes(query.toLowerCase()))
 }
-// const hideLise = () => {
-//   listVisible.value = false
-// }
 
 const handleClickOutside = (event) => {
   if (listVisible.value && !event.target.closest('.list-container')) {
     listVisible.value = false
-    selectedIndex.value = -1;
+    selectedIndex.value = -1
   }
 }
 
@@ -73,7 +85,7 @@ onUnmounted(() => {
     <div
       class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
     >
-      <p class="p-2.5">TEST</p>
+      <p class="p-2.5">{{ caption }}</p>
     </div>
     <input
       @focus="showList"
@@ -95,12 +107,12 @@ onUnmounted(() => {
       <ul class="bg-gray-800 text-sm">
         <li
           @click="onItemClick(item)"
-          @mouseenter="selectedIndex=index"
+          @mouseenter="selectedIndex = index"
           :class="{ 'mx-1 bg-gray-900': index === selectedIndex }"
           v-for="(item, index) in filteredItems"
           :key="index"
         >
-          {{ item }}
+          {{ item.fullName }} {{ item.gradeLevel }}
         </li>
       </ul>
     </div>

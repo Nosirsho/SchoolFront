@@ -14,7 +14,7 @@ export const useStudentStore = defineStore('students', () => {
   const searchByName = async (params) => {
     isLoading.value = true
     try {
-      const response = await utils.sendRequest('GET', `${url}search?search=${params.search}`)
+      const response = await utils.sendRequest('GET', `${url}search?search=${params}`)
       data.value = response
       error.value = null
     } catch (error) {
