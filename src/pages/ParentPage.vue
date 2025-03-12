@@ -5,6 +5,7 @@ import ParentTable from '@/components/Tables/ParentTable/ParentTable.vue'
 //import ParentCrEdForm from '@/components/Forms/ParentCrEdForm.vue';
 //import TestForm from '@/components/Forms/TestForm.vue';
 import ParentCrEdForm from '@/components/Forms/ParentCrEdForm.vue'
+import ParentStudentBindingForm from '@/components/Forms/ParentStudentBindingForm.vue'
 
 const parentStore = useParentStore()
 
@@ -19,7 +20,9 @@ const handleOkButtonClick = () => {
     :meesage="parentStore.showModal.message"
     @okButtonClick="handleOkButtonClick"
   />
-  <ParentCrEdForm v-if="parentStore.formVisible" :isEdit="parentStore.isEdit"/>
+  <ParentCrEdForm v-if="parentStore.formVisible" :isEdit="parentStore.isEdit" />
+  <ParentStudentBindingForm v-if="parentStore.bindFormVisible" />
+
   <div class="container px-6 py-8 mx-auto">
     <h3 class="text-3xl font-medium text-gray-700">Parents</h3>
     <div class="flex flex-col mt-1">

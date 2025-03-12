@@ -14,6 +14,7 @@ export const useParentStore = defineStore('parents', () => {
   const isEdit = ref(false)
   const currItemId = ref()
   const currentItemObj = ref([])
+  const bindFormVisible = ref(false)
   //
 
   const getParentsList = async () => {
@@ -71,21 +72,36 @@ export const useParentStore = defineStore('parents', () => {
   }
 
   const getParentById = async (id) => {
-      isLoading.value = true
-      try {
-        const response = await utils.sendRequest('GET', url + id)
-        if (response.state === 0) {
-          showModalWindow(true, response.message)
-          return
-        }
-        currentItemObj.value = response
-      } catch (error) {
-        error.value = error
-      } finally {
-        isLoading.value = false
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest('GET', url + id)
+      if (response.state === 0) {
+        showModalWindow(true, response.message)
+        return
       }
+      currentItemObj.value = response
+    } catch (error) {
+      error.value = error
+    } finally {
+      isLoading.value = false
     }
+  }
 
+  const getParentWithStudent = async (id) => {
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest('GET', url + 'bind/' + id)
+      if (response.state === 0) {
+        showModalWindow(true, response.message)
+        return
+      }
+      currentItemObj.value = response
+    } catch (error) {
+      error.value = error
+    } finally {
+      isLoading.value = false
+    }
+  }
 
   //Модальное окно
   const showModalVisible = computed(() => showModal.value.visible)
@@ -100,6 +116,7 @@ export const useParentStore = defineStore('parents', () => {
     data,
     showModal,
     formVisible,
+    bindFormVisible,
     isEdit,
     currItemId,
     currentItemObj,
@@ -107,6 +124,7 @@ export const useParentStore = defineStore('parents', () => {
     createParent,
     showModalVisible,
     getParentById,
-    editParent
+    editParent,
+    getParentWithStudent
   }
 })

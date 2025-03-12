@@ -1,6 +1,7 @@
 <script setup>
 import DeleteButton from '@/components/Buttons/DeleteButton.vue'
 import EditButton from '@/components/Buttons/EditButton.vue'
+import BindButton from '@/components/Buttons/BindButton.vue'
 import { useParentStore } from '@/stores/ParentStore'
 
 const parentStore = useParentStore()
@@ -18,6 +19,10 @@ const handleEditButtonClick = () => {
   parentStore.currItemId = prop.id
 }
 
+const handleBindButtonClick = () => {
+  parentStore.bindFormVisible = true
+  parentStore.currItemId = prop.id
+}
 </script>
 <template>
   <tr class="hover:bg-slate-100">
@@ -37,6 +42,7 @@ const handleEditButtonClick = () => {
       {{ phone }}
     </td>
     <td class="text-center border-b border-gray-200 border-l-2">
+      <BindButton class="mx-1" @on-bind-click="handleBindButtonClick" />
       <EditButton class="mx-1" @on-edit-click="handleEditButtonClick" />
       <DeleteButton class="mx-1" @on-delete-click="emit('deleteSelectedStudent', id)" />
     </td>
