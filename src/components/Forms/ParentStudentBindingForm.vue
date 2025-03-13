@@ -6,49 +6,42 @@ import { useParentStore } from '@/stores/ParentStore'
 
 const studentStore = useStudentStore()
 const parentStore = useParentStore()
-const selectedStudent = ref()
 
-const parent = ref({
-  firstName: '',
-  lastName: '',
-  middleName: '',
-  sex: 0,
-  phone: ''
-})
-const prop = defineProps({
-  isEdit: Boolean
-})
+const parentFullName = ref()
+const childArray = ref([])
 
 const studentData = ref([])
 const onChangeHandle = async (query) => {
   await studentStore.searchByName(query)
   studentData.value = studentStore.data
 }
+const selectedHandle = (index, elem) => {
+  if (index !== -1) {
+    childArray.value.splice(index, 1, elem)
+  }
+}
+const AddElement = () => {
+  const elem = {
+    id: '',
+    childFullName: ''
+  }
+  childArray.value.push(elem)
+}
+
 const closeForm = () => {
   parentStore.bindFormVisible = false
 }
 
 const saveEditButtonClick = async () => {
-  const data = {
-    firstName: parent.value.firstName,
-    lastName: parent.value.lastName,
-    middleName: parent.value.middleName,
-    sex: parseInt(parent.value.sex),
-    phone: parent.value.phone,
-    studentId: selectedStudent.value
-  }
-  if (!prop.isEdit) {
-    await parentStore.createParent(data)
-  } else {
-    data.id = parentStore.currItemId
-    await parentStore.editParent(data.id, data)
-  }
+  const parentId = parentStore.currentItemObj.id
+  const data = childArray.value.map((ch) => ch.id)
+  parentStore.bindParentStudents(parentId, data)
 }
 
 onMounted(async () => {
   await parentStore.getParentWithStudent(parentStore.currItemId)
-  console.log('parentStore.currentItemObj' + parentStore.currentItemObj)
-  parent.value.firstName = parentStore.currentItemObj.fullName
+  parentFullName.value = parentStore.currentItemObj.fullName
+  childArray.value = parentStore.currentItemObj.children
   //   parent.value.lastName = parentStore.currentItemObj.lastName
   //   parent.value.middleName = parentStore.currentItemObj.middleName
   //   parent.value.sex = parentStore.currentItemObj.sex
@@ -79,88 +72,35 @@ onMounted(async () => {
         <div
           class="col-span-8 bg-gray-700 text-teal-500 uppercase font-medium text-sm border border-gray-600 rounded-lg"
         >
-          <p class="p-2.5">{{ parent.firstName }}</p>
+          <p class="p-2.5">{{ parentFullName }}</p>
         </div>
-      </div>
-
-      <div class="grid grid-cols-8 mb-2">
-        <div
-          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
-        >
-          <p class="p-2.5">Имя</p>
-        </div>
-        <input
-          type="text"
-          id="first-name"
-          class="col-span-6 shadow-sm bg-gray-800 border border-gray-600 text-gray-200 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Имя"
-          v-model="parent.firstName"
-          required
-        />
-      </div>
-
-      <div class="grid grid-cols-8 mb-2">
-        <div
-          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
-        >
-          <p class="p-2.5">Отчество</p>
-        </div>
-        <input
-          type="text"
-          id="middle-name"
-          class="col-span-6 shadow-sm bg-gray-800 border border-gray-600 text-gray-200 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Отчество"
-          v-model="parent.middleName"
-          required
-        />
-      </div>
-
-      <div class="grid grid-cols-8 mb-2">
-        <div
-          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
-        >
-          <p class="p-2.5">Пол</p>
-        </div>
-        <select
-          v-model="parent.sex"
-          class="col-span-6 shadow-sm bg-gray-800 border border-gray-600 text-gray-400 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        >
-          <option value="0">Не выбран</option>
-          <option value="1">М</option>
-          <option value="2">Ж</option>
-        </select>
-      </div>
-
-      <div class="grid grid-cols-8 mb-2">
-        <div
-          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
-        >
-          <p class="p-2.5">Телефон</p>
-        </div>
-        <input
-          type="text"
-          id="middle-name"
-          class="col-span-6 shadow-sm bg-gray-800 border border-gray-600 text-gray-200 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Телефон"
-          v-model="parent.phone"
-          required
-        />
       </div>
 
       <SelectFilter
-        v-if="!isEdit"
+        v-for="(child, index) in childArray"
+        :key="child.id"
         :data="studentData"
+        :inputText="child.childFullName"
+        :index="index"
         caption="Студент"
         @on-change="onChangeHandle"
-        v-model="selectedStudent"
+        @selected="selectedHandle"
       />
 
+      <div class="text-right">
+        <button
+          @click.prevent="AddElement"
+          class="text-center mt-2 p-1.5 text-teal-600 font-bold bg-gray-700 border border-gray-300 hover:bg-gray-800 rounded-lg focus:ring-2 focus:ring-blue-300"
+        >
+          Добавить
+        </button>
+      </div>
       <div class="text-right">
         <button
           @click.prevent="saveEditButtonClick"
           class="text-center mt-2 p-1.5 text-teal-600 font-bold bg-gray-700 border border-gray-300 hover:bg-gray-800 rounded-lg focus:ring-2 focus:ring-blue-300"
         >
-          {{ isEdit ? 'Изменить' : 'Добавить' }}
+          Сохранить
         </button>
       </div>
     </form>

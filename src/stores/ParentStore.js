@@ -102,6 +102,21 @@ export const useParentStore = defineStore('parents', () => {
       isLoading.value = false
     }
   }
+  const bindParentStudents = async (parentid, data) => {
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest('POST', url + 'bind/' + parentid, data)
+      if (response.state === 0) {
+        showModalWindow(true, response.message)
+        return
+      }
+      currentItemObj.value = response
+    } catch (error) {
+      error.value = error
+    } finally {
+      isLoading.value = false
+    }
+  }
 
   //Модальное окно
   const showModalVisible = computed(() => showModal.value.visible)
@@ -125,6 +140,7 @@ export const useParentStore = defineStore('parents', () => {
     showModalVisible,
     getParentById,
     editParent,
-    getParentWithStudent
+    getParentWithStudent,
+    bindParentStudents
   }
 })

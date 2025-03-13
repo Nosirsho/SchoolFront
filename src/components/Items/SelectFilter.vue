@@ -1,16 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-// const data = [
-//   'Авезов',
-//   'Баранов',
-//   'Вакилов',
-//   'Гаратов',
-//   'Дастунов',
-//   'Егоров',
-//   'Париев',
-//   'Литров',
-//   'Растаров'
-// ]
+
 const modelValue = defineModel()
 const updateModelValue = (value) => {
   modelValue.value = value
@@ -18,17 +8,33 @@ const updateModelValue = (value) => {
 
 const props = defineProps({
   data: Array,
-  caption: String
+  caption: String,
+  inputText: String,
+  index: Number
 })
+
 const filteredItems = computed(() => {
-  return props.data.filter((option) =>
-    option.fullName.toLowerCase().includes(inputText.value.toLowerCase())
-  )
+  if (!Array.isArray(props.data) || !props.data) {
+    return [] // Return an empty array if data is not valid.
+  }
+
+  return props.data.filter((option) => {
+    const fullName = option?.fullName // Use optional chaining
+
+    if (fullName && inputText.value) {
+      return fullName.toLowerCase().includes(inputText.value.toLowerCase())
+    } else if (fullName && !inputText.value) {
+      return true // if no inputText.value, return all items that have a fullName.
+    } else {
+      return false // Skip items without fullName or if inputText.value is undefined.
+    }
+  })
 })
-const inputText = ref()
+
+const inputText = ref(props.inputText)
 const listVisible = ref(false)
 const selectedIndex = ref(-1)
-const emit = defineEmits(['onChange'])
+const emit = defineEmits(['onChange', 'selected'])
 
 const handleKeyDown = (event) => {
   if (listVisible.value) {
@@ -54,6 +60,11 @@ const onItemClick = (item) => {
   inputText.value = item.fullName
   updateModelValue(item.id)
   listVisible.value = false
+  const elem = {
+    id: item.id,
+    childFullName: item.fullName
+  }
+  emit('selected', props.index, elem)
 }
 const showList = () => {
   listVisible.value = true
@@ -80,6 +91,7 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
+
 <template>
   <div class="grid grid-cols-8 mb-2 list-container">
     <div
