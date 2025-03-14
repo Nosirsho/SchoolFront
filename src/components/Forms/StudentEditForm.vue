@@ -101,22 +101,6 @@ const emit = defineEmits(['closeAddForm'])
         <div
           class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
         >
-          <p class="p-2.5">Имя</p>
-        </div>
-        <input
-          type="text"
-          id="first-name"
-          class="col-span-6 shadow-sm bg-gray-800 border border-gray-600 text-gray-200 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          placeholder="Имя"
-          v-model="student.firstName"
-          required
-        />
-      </div>
-
-      <div class="grid grid-cols-8 mb-2">
-        <div
-          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
-        >
           <p class="p-2.5">Фамилия</p>
         </div>
         <input
@@ -125,6 +109,22 @@ const emit = defineEmits(['closeAddForm'])
           class="col-span-6 shadow-sm bg-gray-800 border border-gray-600 text-gray-200 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           placeholder="Фамилия"
           v-model="student.lastName"
+          required
+        />
+      </div>
+
+      <div class="grid grid-cols-8 mb-2">
+        <div
+          class="col-span-2 bg-gray-700 text-teal-500 font-medium text-sm border border-gray-600 rounded-l-lg"
+        >
+          <p class="p-2.5">Имя</p>
+        </div>
+        <input
+          type="text"
+          id="first-name"
+          class="col-span-6 shadow-sm bg-gray-800 border border-gray-600 text-gray-200 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="Имя"
+          v-model="student.firstName"
           required
         />
       </div>

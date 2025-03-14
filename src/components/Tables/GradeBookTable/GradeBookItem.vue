@@ -13,7 +13,7 @@ const props = defineProps({
   grades: Array,
   operDay: Date
 })
-const currGrade = ref()
+const currGrade = ref(0)
 const emit = defineEmits(['addCurrentDayGrade'])
 const currentMonthYear = ref()
 

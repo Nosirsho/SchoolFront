@@ -81,10 +81,10 @@ export const useStudentStore = defineStore('students', () => {
     try {
       const response = await utils.sendRequest('POST', `${url}`, params)
       if (response.state === 0) {
-        showModalWindow(false, response.message)
+        showModalWindow(true, response.message)
         return
       }
-      showModalWindow(true, 'Успешно добавлен!')
+      showModalWindow(false, 'Успешно добавлен!')
       const student = response
       data.value.push(student)
       error.value = null
