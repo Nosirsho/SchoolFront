@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import utils from '@/utils/utils'
 
-const url = 'http://localhost:5296/Gradebook/'
+const url = 'http://localhost:8010/Gradebook/'
 
 export const useGradeBookStore = defineStore('gradeBook', () => {
   const data = ref([])

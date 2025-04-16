@@ -6,8 +6,12 @@ export default {
     const day = String(date.getDate()).padStart(2, '0')
     return `${year}-${month}-${day}`
   },
+  getAPIUrl: () => {
+    return 'http://localhost:8010/'
+    //return 'http://localhost:3000/api/'
+  },
 
-   sendRequest: async (method, url, data = null) =>{
+  sendRequest: async (method, url, data = null) => {
     try {
       const response = await axios({
         method,

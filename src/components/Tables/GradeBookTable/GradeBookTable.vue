@@ -4,8 +4,8 @@ import { useGradeBookStore } from '@/stores/GradeBookStore.js'
 import { useLessonStore } from '@/stores/LessonStore.js'
 import { useSysSettingStore } from '@/stores/SysSettingStore'
 
-import GradeBookItem from '&/Tables/GradeBookTable/GradeBookItem.vue'
-import MonthYearPicker from '&/MonthYearPicker/MonthYearPicker.vue'
+import GradeBookItem from '/src/components/Tables/GradeBookTable/GradeBookItem.vue'
+import MonthYearPicker from '/src/components/MonthYearPicker/MonthYearPicker.vue'
 import utils from '@/utils/utils'
 
 const gradeBookStore = useGradeBookStore()

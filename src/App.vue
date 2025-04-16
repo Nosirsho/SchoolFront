@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-import Sidebar from '&/Sidebar/Sidebar.vue'
-import Header from '&/Header/Header.vue'
-import Main from '&/main/Main.vue'
+import Sidebar from '/src/components/sidebar/Sidebar.vue'
+import Header from '/src/components/Header/Header.vue'
+import Main from '/src/components/main/Main.vue'
 const sidebarOpen = ref(false)
 </script>
 <template>

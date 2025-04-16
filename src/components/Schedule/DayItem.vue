@@ -1,5 +1,5 @@
 <script setup>
-import LessonItem from '&/Schedule/LessonItem.vue'
+import LessonItem from '/src/components/Schedule/LessonItem.vue'
 import AddButton from '../Buttons/AddButton.vue'
 import { useScheduleStore } from '@/stores/ScheduleStore.js'
 const scheduleStore = useScheduleStore()

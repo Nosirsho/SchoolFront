@@ -4,8 +4,8 @@ import { useAutoAnimate } from '@formkit/auto-animate/vue'
 
 import { useStudentStore } from '@/stores/StudentStore.js'
 
-import StudentTableItem from '&/Tables/StudentTable/StudentTableItem.vue'
-import StudentEditForm from '&/Forms/StudentEditForm.vue'
+import StudentTableItem from '/src/components/Tables/StudentTable/StudentTableItem.vue'
+import StudentEditForm from '/src/components/Forms/StudentEditForm.vue'
 
 const [parent] = useAutoAnimate()
 

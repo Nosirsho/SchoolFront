@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useAutoAnimate } from '@formkit/auto-animate/vue'
-import SysSettingTableItem from '&/Tables/SysSettingTable/SysSettingTableItem.vue'
+import SysSettingTableItem from '/src/components/Tables/SysSettingTable/SysSettingTableItem.vue'
 
 import { useSysSettingStore } from '@/stores/SysSettingStore.js'
 

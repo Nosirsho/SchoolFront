@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import utils from '@/utils/utils'
 
-const url = 'http://localhost:5296/parents/'
+const url = 'http://localhost:8010/parents/'
 
 export const useParentStore = defineStore('parents', () => {
   const data = ref([])

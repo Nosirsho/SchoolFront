@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const url = 'http://localhost:5296/Lesson/'
+const url = 'http://localhost:8010/Lesson/'
 
 export const useLessonStore = defineStore('lesson', () => {
   const data = ref([])

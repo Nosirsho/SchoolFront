@@ -67,7 +67,9 @@ onMounted(async () => {
 
   try {
     //const { data } = await axios.get('http://localhost:5296/GradeLevel')
-    const data = await utils.sendRequest('GET', 'http://localhost:5296/GradeLevel')
+    const data = await utils.sendRequest('GET', 'http://localhost:3000/api/GradeLevel')
+    //const data = await utils.sendRequest('GET', 'http://localhost:5296/GradeLevel')
+
     gradeLevels.value = data
   } catch (e) {
     console.log(e)

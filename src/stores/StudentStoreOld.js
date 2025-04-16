@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const url = 'http://localhost:5296/Student/'
+const url = 'http://localhost:8010/Student/'
 
 export const useStudentStore2 = defineStore('studentStore', {
   state: () => ({

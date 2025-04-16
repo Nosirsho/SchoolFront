@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 
 import { useScheduleStore } from '@/stores/ScheduleStore.js'
 
-import GradeItem from '&/Schedule/GradeItem.vue'
+import GradeItem from '/src/components/Schedule/GradeItem.vue'
 
 const scheduleStore = useScheduleStore()
 

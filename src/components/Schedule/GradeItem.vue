@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import DayItem from '&/Schedule/DayItem.vue'
+import DayItem from '/src/components/Schedule/DayItem.vue'
 import { useLessonStore } from '@/stores/LessonStore.js'
 const lessonStore = useLessonStore()
 const lessonData = ref([])
@@ -12,7 +12,6 @@ onMounted(async () => {
   await lessonStore.getlessons()
   lessonData.value = lessonStore.data
 })
-
 </script>
 <template>
   <div class="col-span-1 w-10 px-3 pb-3 bg-white border border-gray-200 rounded-lg ring-1">
@@ -26,7 +25,7 @@ onMounted(async () => {
       :gradeLevel="prop.gradeLevel"
       :dayInt="item.dayInt"
       :lessonNumbers="item.lessonNumbers"
-      :lessonData = "lessonData"
+      :lessonData="lessonData"
     />
   </div>
 </template>

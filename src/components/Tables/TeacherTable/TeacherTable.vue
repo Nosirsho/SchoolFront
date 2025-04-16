@@ -1,77 +1,25 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import axios from 'axios'
-import { useAutoAnimate } from '@formkit/auto-animate/vue'
+import { ref, onMounted } from 'vue'
+import { useTeacherStore } from '@/stores/TeacherStore.js'
 
-import TeacherTableItem from '&/Tables/TeacherTable/TeacherTableItem.vue'
-import TeacherEditForm from '&/Forms/TeacherEditForm.vue'
+import TeacherTableItem from './TeacherTableItem.vue'
 
-const [parent] = useAutoAnimate(/* optional config */)
-
+const teacherStore = useTeacherStore()
 const items = ref([])
-const isVisibleForm = ref(false)
-const editTeacherId = ref(null)
-const isEdit = ref(false)
-const searchInput = ref()
 
-const handleAddTeacher = (teacher) => {
-  items.value.push(teacher)
-}
-const handleEditTeacher = (teacher) => {
-  const index = items.value.findIndex((item) => item.id === teacher.id)
-  if (index !== -1) {
-    items.value.splice(index, 1, teacher)
-  }
-}
-
-const handleTeacherEdit = (teacherId) => {
-  isVisibleForm.value = true
-  editTeacherId.value = teacherId
-  isEdit.value = true
-}
-const handleDeleteTeacher = (teacherId) => {
-  items.value = items.value.filter((t) => t.id !== teacherId)
-}
-const openAddForm = async () => {
-  isVisibleForm.value = true
-  isEdit.value = false
-}
-const closeAddForm = async () => {
-  isVisibleForm.value = false
-}
-
-const searchTeachers = async () => {
-  try {
-    await axios
-      .get('http://localhost:5296/Teacher/search', { params: { search: searchInput.value } })
-      .then((response) => {
-        items.value = response.data
-      })
-  } catch (e) {
-    console.log(e)
-  }
+const openAddForm = () => {
+  teacherStore.formVisible = true
+  teacherStore.isEdit = false
 }
 
 onMounted(async () => {
-  try {
-    const { data } = await axios.get('http://localhost:5296/Teacher')
-    items.value = data
-  } catch (e) {
-    console.log(e)
-  }
+  await teacherStore.getTeachersList()
+  items.value = teacherStore.data
 })
 </script>
 <template>
-  <div ref="parent">
-    <TeacherEditForm
-      @close-add-form="closeAddForm"
-      @addTeacher="handleAddTeacher"
-      @editTeacher="handleEditTeacher"
-      :editTeacherId="editTeacherId"
-      :isEdit="isEdit"
-      v-if="isVisibleForm"
-    />
-
+  <div>
+    <!--Search Input Start-->
     <div class="max-auto mx-auto">
       <label
         for="default-search"
@@ -97,7 +45,6 @@ onMounted(async () => {
           </svg>
         </div>
         <input
-          v-model="searchInput"
           type="search"
           id="default-search"
           class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -105,13 +52,14 @@ onMounted(async () => {
           required
         />
         <button
-          @click="searchTeachers"
+          @click="searchStudents"
           class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Search
         </button>
       </div>
     </div>
+    <!--Search Input End-->
 
     <table class="min-w-full">
       <thead>
@@ -152,15 +100,13 @@ onMounted(async () => {
       <tbody class="bg-white" v-auto-animate>
         <!--TeacherTableItem-->
         <TeacherTableItem
-          v-for="(item, index) in items"
-          :key="index"
+          v-for="item in items"
+          :key="item.id"
           :id="item.id"
           :full-name="item.fullName"
           :birth-date="item.birthDate"
           :phone="item.phone"
           :sex="item.sex"
-          @editTeacher="handleTeacherEdit"
-          @deleteTeacher="handleDeleteTeacher"
         />
         <!--End TeacherTableItem-->
       </tbody>

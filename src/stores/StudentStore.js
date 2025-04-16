@@ -1,8 +1,10 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import utils from '@/utils/utils'
+//http://localhost:8010/parents/
 
-const url = 'http://localhost:5296/Student/'
+//const url = utils.getAPIUrl + 'Student/'
+const url = 'http://localhost:8010/Student/'
 
 export const useStudentStore = defineStore('students', () => {
   const data = ref([])
@@ -62,7 +64,7 @@ export const useStudentStore = defineStore('students', () => {
         return
       }
       const student = response
-      showModalWindow(true, 'Успешно изменен!')
+      showModalWindow(false, 'Успешно изменен!')
       const index = data.value.findIndex((item) => item.id === student.id)
       if (index !== -1) {
         data.value.splice(index, 1, student)

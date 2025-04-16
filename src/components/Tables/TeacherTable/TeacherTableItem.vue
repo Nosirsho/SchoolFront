@@ -1,7 +1,10 @@
 <script setup>
-import axios from 'axios'
 import DeleteButton from '@/components/Buttons/DeleteButton.vue'
 import EditButton from '@/components/Buttons/EditButton.vue'
+
+import { useTeacherStore } from '@/stores/TeacherStore'
+
+const teacherStore = useTeacherStore()
 
 const props = defineProps({
   id: String,
@@ -10,17 +13,14 @@ const props = defineProps({
   phone: String,
   sex: String
 })
-const deleteTeacher = async () => {
-  try {
-    await axios.delete(`http://localhost:5296/Teacher/${props.id}`).then((response) => {
-      emit('deleteTeacher', response.data)
-    })
-  } catch (e) {
-    console.log(e)
-  }
+const handleEditButtonClick = () => {
+  teacherStore.formVisible = true
+  teacherStore.isEdit = true
+  teacherStore.currItemId = props.id
 }
-
-const emit = defineEmits(['deleteTeacher'])
+const handleDeleteButtonClick = () => {
+  teacherStore.deleteTeacher(props.id)
+}
 </script>
 <template>
   <tr class="hover:bg-slate-100">
@@ -45,8 +45,8 @@ const emit = defineEmits(['deleteTeacher'])
       {{ sex }}
     </td>
     <td class="text-center border-b border-gray-200 border-l-2">
-      <EditButton class="mx-1" @on-edit-click="$emit('editTeacher', id)" />
-      <DeleteButton @on-delete-click="deleteTeacher" />
+      <EditButton class="mx-1" @on-edit-click="handleEditButtonClick" />
+      <DeleteButton class="mx-1" @on-delete-click="handleDeleteButtonClick" />
     </td>
   </tr>
 </template>

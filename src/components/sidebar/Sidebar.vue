@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
 import { ref } from 'vue'
-import SidebarItem from '&/Sidebar/SidebarItem.vue'
+import SidebarItem from './SidebarItem.vue'
 const sidebarOpen = ref(false)
 </script>
 <template>

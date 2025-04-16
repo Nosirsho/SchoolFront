@@ -2,42 +2,22 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import utils from '@/utils/utils'
 
-const url = 'http://localhost:8010/SysSetting/'
+const url = 'http://localhost:8010/teachers/'
 
-export const useSysSettingStore = defineStore('sysSetting', () => {
+export const useTeacherStore = defineStore('teacher', () => {
   const data = ref([])
-  const sysSettingTypesList = ref([])
   const error = ref(null)
   const showModal = ref([])
   const isLoading = ref(false)
-  const operDate = ref()
   //Форма
   const formVisible = ref()
   const isEdit = ref(false)
   const currItemId = ref()
   const currentItemObj = ref([])
+  const bindFormVisible = ref(false)
   //
 
-  const showModalVisible = computed(() => showModal.value.visible)
-
-  const getSysSettingType = async () => {
-    isLoading.value = true
-    try {
-      const response = await utils.sendRequest('GET', url + 'type')
-      if (response.state === 0) {
-        showModalWindow(true, response.message)
-        return
-      }
-      sysSettingTypesList.value = response
-      error.value = null
-    } catch (error) {
-      error.value = error
-      sysSettingTypesList.value = null
-    } finally {
-      isLoading.value = false
-    }
-  }
-  const getSysSettings = async () => {
+  const getTeachersList = async () => {
     isLoading.value = true
     try {
       const response = await utils.sendRequest('GET', url)
@@ -55,45 +35,65 @@ export const useSysSettingStore = defineStore('sysSetting', () => {
     }
   }
 
-  const setSysSettingValue = async (data) => {
+  const createTeacher = async (teacherData) => {
     isLoading.value = true
     try {
-      const response = await utils.sendRequest('POST', url, data)
+      const response = await utils.sendRequest('POST', url, teacherData)
       if (response.state === 0) {
         showModalWindow(true, response.message)
         return
       }
+      const teacher = response
+      formVisible.value = false
+      data.value.push(teacher)
       showModalWindow(false, 'Успешно!')
-      sysSettingTypesList.value = response
       error.value = null
     } catch (error) {
       error.value = error
-      sysSettingTypesList.value = null
     } finally {
       isLoading.value = false
     }
   }
 
-  const updateSysSettingValue = async (data) => {
+  const editTeacher = async (id, teacherData) => {
     isLoading.value = true
     try {
-      const response = await utils.sendRequest('PUT', url + currItemId.value, data)
+      const response = await utils.sendRequest('PUT', url + id, teacherData)
       if (response.state === 0) {
         showModalWindow(true, response.message)
         return
       }
+      const teacher = response
+      formVisible.value = false
       showModalWindow(false, 'Успешно!')
-      sysSettingTypesList.value = response
+      const index = data.value.findIndex((item) => item.id === teacher.id)
+      if (index !== -1) {
+        data.value.splice(index, 1, teacher)
+      }
       error.value = null
     } catch (error) {
       error.value = error
-      sysSettingTypesList.value = null
     } finally {
       isLoading.value = false
     }
   }
 
-  const getSysSettingById = async (id) => {
+  const deleteTeacher = async (id) => {
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest('DELETE', `${url}${id}`)
+      const teacherId = response
+      const indexToDelete = data.value.findIndex((t) => t.id === teacherId)
+      data.value.splice(indexToDelete, 1)
+    } catch (error) {
+      error.value = error
+      data.value = null
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const getParentById = async (id) => {
     isLoading.value = true
     try {
       const response = await utils.sendRequest('GET', url + id)
@@ -104,52 +104,68 @@ export const useSysSettingStore = defineStore('sysSetting', () => {
       currentItemObj.value = response
     } catch (error) {
       error.value = error
-      sysSettingTypesList.value = null
     } finally {
       isLoading.value = false
     }
   }
 
-  const getSysSettingByCode = async (code) => {
+  const getParentWithStudent = async (id) => {
     isLoading.value = true
     try {
-      const response = await utils.sendRequest('GET', url + code)
+      const response = await utils.sendRequest('GET', url + 'bind/' + id)
       if (response.state === 0) {
         showModalWindow(true, response.message)
         return
       }
-      isLoading.value = false
-      return response
+      currentItemObj.value = response
     } catch (error) {
       error.value = error
-      sysSettingTypesList.value = null
     } finally {
       isLoading.value = false
     }
   }
+  const bindParentStudents = async (parentid, data) => {
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest('POST', url + 'bind/' + parentid, data)
+      if (response.state === 0) {
+        showModalWindow(true, response.message)
+        return
+      }
+      currentItemObj.value = response
+    } catch (error) {
+      error.value = error
+    } finally {
+      isLoading.value = false
+    }
+  }
+  const teachersCount = computed(() => data.value.length)
 
+  //Модальное окно
+  const showModalVisible = computed(() => showModal.value.visible)
   const showModalWindow = (isError, msg) => {
     showModal.value.visible = true
     showModal.value.isError = isError
     showModal.value.message = msg
   }
+  //End Модальное окно
 
   return {
     data,
-    showModalVisible,
-    sysSettingTypesList,
-    showModalWindow,
     showModal,
-    getSysSettingType,
-    getSysSettingById,
-    getSysSettingByCode,
-    setSysSettingValue,
-    updateSysSettingValue,
-    getSysSettings,
-    operDate,
     formVisible,
+    bindFormVisible,
     isEdit,
     currItemId,
-    currentItemObj
+    currentItemObj,
+    getTeachersList,
+    createTeacher,
+    showModalVisible,
+    getParentById,
+    editTeacher,
+    deleteTeacher,
+    getParentWithStudent,
+    bindParentStudents,
+    teachersCount
   }
 })
