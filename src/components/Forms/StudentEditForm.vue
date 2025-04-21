@@ -3,8 +3,10 @@ import { onMounted, ref } from 'vue'
 import Datepicker from 'vue3-datepicker'
 import utils from '@/utils/utils.js'
 import { useStudentStore } from '@/stores/StudentStore.js'
+import { useGradeLevelStore } from '@/stores/GradeLevelStore.js'
 
 const studentStore = useStudentStore()
+const gradeLevelStore = useGradeLevelStore()
 const props = defineProps({
   editStudentId: {
     type: String,
@@ -67,7 +69,7 @@ onMounted(async () => {
 
   try {
     //const { data } = await axios.get('http://localhost:5296/GradeLevel')
-    const data = await utils.sendRequest('GET', 'http://localhost:3000/api/GradeLevel')
+    const data = await gradeLevelStore.getGradeLevelList(true)
     //const data = await utils.sendRequest('GET', 'http://localhost:5296/GradeLevel')
 
     gradeLevels.value = data

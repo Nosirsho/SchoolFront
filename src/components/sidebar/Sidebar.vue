@@ -2,7 +2,72 @@
 <script setup>
 import { ref } from 'vue'
 import SidebarItem from './SidebarItem.vue'
+
 const sidebarOpen = ref(false)
+const sidebarData = ref([
+  {
+    title: 'Справочник',
+    iconSrc: '/src/assets/png/book.png',
+    child: [
+      {
+        title: 'Класс',
+        iconSrc: '/src/assets/png/gradelevel.png',
+        href: '/gradelevels',
+        isOpen: false
+      },
+      {
+        title: 'Предмет',
+        iconSrc: '/src/assets/png/lesson.png',
+        href: '/lessons',
+        isOpen: false
+      }
+    ]
+  },
+  {
+    title: 'Педагоги',
+    iconSrc: '/src/assets/png/teacher.png',
+    href: '/teachers'
+  },
+  {
+    title: 'Студенты',
+    iconSrc: '/src/assets/png/student.png',
+    href: '/students'
+  },
+  {
+    title: 'Родители',
+    iconSrc: '/src/assets/png/parent.png',
+    href: '/parents'
+  },
+  {
+    title: 'Расписание',
+    iconSrc: '/src/assets/png/schedules.png',
+    href: '/schedules'
+  },
+  {
+    title: 'Журнал',
+    iconSrc: '/src/assets/png/gradebook.png',
+    href: '/gradebooks'
+  },
+  {
+    title: 'Настройки',
+    iconSrc: '/src/assets/png/setting.png',
+    child: [
+      {
+        title: 'Системные настройки',
+        iconSrc: '/src/assets/png/syssettings.png',
+        href: '/syssettings',
+        isOpen: false
+      }
+    ]
+  }
+])
+const onBestClick = (item) => {
+  console.log('Test: ' + item)
+  const index = sidebarData.value.findIndex((t) => t.title === item)
+  sidebarData.value[index].child.forEach((element) => {
+    element.isOpen = !element.isOpen
+  })
+}
 </script>
 <template>
   <div
@@ -31,11 +96,32 @@ const sidebarOpen = ref(false)
     </div>
 
     <nav class="mt-10">
-      <!--SideBarItems-->
-      <RouterLink to="/students">
+      <div v-for="(item, index) in sidebarData" :key="index">
+        <div>
+          <RouterLink v-if="item.href" :to="item.href">
+            <SidebarItem :title="item.title" :imgSrc="item.iconSrc" />
+          </RouterLink>
+          <SidebarItem
+            @click="onBestClick(item.title)"
+            v-else
+            :title="item.title"
+            :imgSrc="item.iconSrc"
+          />
+        </div>
+
+        <div class="pl-4 bg-gray-800" v-if="item.child">
+          <div v-for="(subItem, index) in item.child" :key="index">
+            <RouterLink :to="subItem.href">
+              <SidebarItem v-if="subItem.isOpen" :title="subItem.title" :imgSrc="subItem.iconSrc" />
+            </RouterLink>
+          </div>
+        </div>
+      </div>
+
+      <!-- <RouterLink to="/students">
         <SidebarItem title="Students" />
       </RouterLink>
-      <!-- End SideBarItems-->
+
       <RouterLink to="/teachers">
         <SidebarItem title="Teachers" />
       </RouterLink>
@@ -51,6 +137,9 @@ const sidebarOpen = ref(false)
       <RouterLink to="/parents">
         <SidebarItem title="Parent" />
       </RouterLink>
+      <RouterLink to="/gradelevels">
+        <SidebarItem title="GradeLevel" />
+      </RouterLink> -->
     </nav>
   </div>
 </template>

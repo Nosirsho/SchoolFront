@@ -9,7 +9,7 @@ const prop = defineProps({
   dayLessons: Object
 })
 onMounted(async () => {
-  await lessonStore.getlessons()
+  await lessonStore.getLessonsList()
   lessonData.value = lessonStore.data
 })
 </script>

@@ -2,14 +2,13 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import utils from '@/utils/utils'
 
-const url = 'http://localhost:8010/Lessons/'
+const url = 'http://localhost:8010/gradelevels/'
 
-export const useLessonStore = defineStore('lesson', () => {
+export const useGradeLevelStore = defineStore('gradelevel', () => {
   const data = ref([])
   const error = ref(null)
   const showModal = ref([])
   const isLoading = ref(false)
-
   //Форма
   const formVisible = ref()
   const isEdit = ref(false)
@@ -18,12 +17,10 @@ export const useLessonStore = defineStore('lesson', () => {
 
   //
 
-  const dataCount = computed(() => data.value.length)
-
-  const getLessonsList = async (returning) => {
+  const getGradeLevelList = async (returning) => {
     isLoading.value = true
     try {
-      const response = await utils.sendRequest('GET', url)
+      const response = await utils.sendRequest('GET', url + 'year')
       if (response.state === 0) {
         showModalWindow(true, response.message)
         return
@@ -41,10 +38,10 @@ export const useLessonStore = defineStore('lesson', () => {
     }
   }
 
-  const getLessonById = async (id) => {
+  const getGradeLevelById = async (id) => {
     isLoading.value = true
     try {
-      const response = await utils.sendRequest('GET', url + id)
+      const response = await utils.sendRequest('GET', url + 'year/' + id)
       if (response.state === 0) {
         showModalWindow(true, response.message)
         return
@@ -57,10 +54,10 @@ export const useLessonStore = defineStore('lesson', () => {
     }
   }
 
-  const editLesson = async (id, lData) => {
+  const editGradeLevel = async (id, glData) => {
     isLoading.value = true
     try {
-      const response = await utils.sendRequest('PUT', url + id, lData)
+      const response = await utils.sendRequest('PUT', url + id, glData)
       if (response.state === 0) {
         showModalWindow(true, response.message)
         return
@@ -79,10 +76,11 @@ export const useLessonStore = defineStore('lesson', () => {
       isLoading.value = false
     }
   }
-  const createLesson = async (lData) => {
+
+  const createGradeLevel = async (glData) => {
     isLoading.value = true
     try {
-      const response = await utils.sendRequest('POST', url, lData)
+      const response = await utils.sendRequest('POST', url, glData)
       if (response.state === 0) {
         showModalWindow(true, response.message)
         return
@@ -98,13 +96,12 @@ export const useLessonStore = defineStore('lesson', () => {
       isLoading.value = false
     }
   }
-  const deleteLesson = async (id) => {
+  const deleteGradeLevel = async (id) => {
     isLoading.value = true
     try {
       const response = await utils.sendRequest('DELETE', `${url}${id}`)
-      const lessonId = response
-      showModalWindow(false, 'Успешно удален!')
-      const indexToDelete = data.value.findIndex((t) => t.id === lessonId)
+      const gradeLevelId = response
+      const indexToDelete = data.value.findIndex((t) => t.id === gradeLevelId)
       data.value.splice(indexToDelete, 1)
     } catch (error) {
       error.value = error
@@ -131,11 +128,10 @@ export const useLessonStore = defineStore('lesson', () => {
     isEdit,
     currItemId,
     currentItemObj,
-    dataCount,
-    getLessonsList,
-    getLessonById,
-    editLesson,
-    createLesson,
-    deleteLesson
+    getGradeLevelList,
+    getGradeLevelById,
+    editGradeLevel,
+    createGradeLevel,
+    deleteGradeLevel
   }
 })
