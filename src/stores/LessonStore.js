@@ -35,6 +35,7 @@ export const useLessonStore = defineStore('lesson', () => {
       error.value = null
     } catch (error) {
       error.value = error
+      showModalWindow(true, error.message)
       data.value = null
     } finally {
       isLoading.value = false

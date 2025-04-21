@@ -62,11 +62,11 @@ const sidebarData = ref([
   }
 ])
 const onBestClick = (item) => {
-  console.log('Test: ' + item)
   const index = sidebarData.value.findIndex((t) => t.title === item)
   sidebarData.value[index].child.forEach((element) => {
     element.isOpen = !element.isOpen
   })
+  sidebarData.value[index].isOpen = !sidebarData.value[index].isOpen
 }
 </script>
 <template>
@@ -106,6 +106,8 @@ const onBestClick = (item) => {
             v-else
             :title="item.title"
             :imgSrc="item.iconSrc"
+            :is-group="true"
+            :is-open="item.isOpen"
           />
         </div>
 
