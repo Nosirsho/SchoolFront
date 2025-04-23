@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useGradeBookStore } from '@/stores/GradeBookStore.js'
 import { useLessonStore } from '@/stores/LessonStore.js'
 import { useSysSettingStore } from '@/stores/SysSettingStore'
+import { useGradeLevelStore } from '@/stores/GradeLevelStore'
 
 import GradeBookItem from '/src/components/Tables/GradeBookTable/GradeBookItem.vue'
 import MonthYearPicker from '/src/components/MonthYearPicker/MonthYearPicker.vue'
@@ -11,9 +12,11 @@ import utils from '@/utils/utils'
 const gradeBookStore = useGradeBookStore()
 const lessonStore = useLessonStore()
 const sysSettingStore = useSysSettingStore()
+const gradeLevelStore = useGradeLevelStore()
 
 const items = ref(gradeBookStore.data)
 const lessonData = ref()
+const gradeLevelData = ref()
 
 const searchInput = ref()
 const daysArray = ref([])
@@ -22,6 +25,7 @@ const systemDate = ref()
 const operDay = ref()
 
 const selectedLesson = ref()
+const selectedGradeLevel = ref()
 
 const handleChangeDate = async (date) => {
   currentMonthYear.value = date.substring(6, 10)
@@ -42,26 +46,38 @@ const handleDeleteCurrentDayGrade = async (gradeBookObj) => {
 
 const lessonDropdownChange = async () => {
   const date = utils.formatDate(systemDate.value)
-  await gradeBookStore.getIntervalGradeBooks(date, selectedLesson.value)
+  await gradeBookStore.getIntervalGradeBooks(date, selectedLesson.value, selectedGradeLevel.value)
+  items.value = gradeBookStore.data
+}
+const gradeLevelDropdownChange = async () => {
+  const date = utils.formatDate(systemDate.value)
+  await gradeBookStore.getIntervalGradeBooks(date, selectedLesson.value, selectedGradeLevel.value)
   items.value = gradeBookStore.data
 }
 
 onMounted(async () => {
   await lessonStore.getLessonsList()
+  await gradeLevelStore.getGradeLevelList()
   const operDayString = ref(await sysSettingStore.getSysSettingByCode('OPER_DAY'))
   sysSettingStore.operDate = operDayString
   operDay.value = new Date(operDayString.value)
   lessonData.value = lessonStore.data
+  gradeLevelData.value = gradeLevelStore.data
   currentMonthYear.value = operDayString.value
   selectedLesson.value = lessonData.value[0]
+  selectedGradeLevel.value = gradeLevelData.value[0]
   systemDate.value = new Date(operDay.value)
   systemDate.value.setDate(1)
   const date = utils.formatDate(systemDate.value)
-  await gradeBookStore.getIntervalGradeBooks(date, selectedLesson.value.id)
+  await gradeBookStore.getIntervalGradeBooks(date, selectedLesson.value.id, selectedGradeLevel.value.id)
   items.value = gradeBookStore.data
   daysArray.value = gradeBookStore.getDaysArray()
   selectedLesson.value = lessonData.value[0].id
+  selectedGradeLevel.value = gradeLevelData.value[0].id
 })
+const loging = (searchInput) => {
+  console.log(searchInput)
+}
 </script>
 <template>
   <div ref="parent">
@@ -72,8 +88,22 @@ onMounted(async () => {
         id="default-search"
         class="w-80 m-2 p-2 rounded-lg text-sm text-gray-900 border border-blue-400 bg-gray-100 focus:border-blue-500"
         placeholder="Поиск по шаблону ФИО"
+        @change="loging(searchInput)"
       />
       <MonthYearPicker :date="systemDate" @changeDate="handleChangeDate" />
+
+      <div class="relative">
+        <select
+          @change="gradeLevelDropdownChange"
+          v-model="selectedGradeLevel"
+          class="w-40 m-2 p-2 rounded-lg text-sm text-gray-900 border border-blue-400 bg-gray-100 focus:border-blue-500"
+        >
+          <option v-for="gradeLevel in gradeLevelData" :key="gradeLevel.id" :value="gradeLevel.id">
+            {{ gradeLevel.name }}
+          </option>
+        </select>
+      </div>
+
       <div class="relative">
         <select
           @change="lessonDropdownChange"

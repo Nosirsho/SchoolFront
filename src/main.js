@@ -14,6 +14,7 @@ import SysSettingPage from './pages/SysSettingPage.vue'
 import ParentPage from './pages/ParentPage.vue'
 import GradeLevelPage from './pages/GradeLevelPage.vue'
 import LessonPage from './pages/LessonPage.vue'
+import NotificationSenderPage from './pages/NotificationSenderPage.vue'
 
 const routes = [
   { path: '/students', name: 'StudentPage', component: StudentPage },
@@ -23,7 +24,8 @@ const routes = [
   { path: '/syssettings', name: 'SysSettingPage', component: SysSettingPage },
   { path: '/parents', name: 'ParentPage', component: ParentPage },
   { path: '/gradelevels', name: 'GradeLevelPage', component: GradeLevelPage },
-  { path: '/lessons', name: 'LessonPage', component: LessonPage }
+  { path: '/lessons', name: 'LessonPage', component: LessonPage },
+  { path: '/notificationsender', name: 'NotificationSenderPage', component: NotificationSenderPage }
 ]
 const router = createRouter({
   history: createWebHistory(),

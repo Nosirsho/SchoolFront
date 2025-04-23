@@ -93,7 +93,7 @@ onMounted(async () => {
           :key="item.id"
           :id="item.id"
           :name="item.name"
-          :entry-year="item.year"
+          :entryYear="item.year"
         />
         <!--End GradeLevelTableItem-->
       </tbody>

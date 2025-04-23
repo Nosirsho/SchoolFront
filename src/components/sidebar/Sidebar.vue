@@ -49,6 +49,11 @@ const sidebarData = ref([
     href: '/gradebooks'
   },
   {
+    title: 'Сервис уведомления',
+    iconSrc: '/src/assets/png/gradebook.png',
+    href: '/notificationsender'
+  },
+  {
     title: 'Настройки',
     iconSrc: '/src/assets/png/setting.png',
     child: [

@@ -7,9 +7,18 @@ import { useGradeLevelStore } from '@/stores/GradeLevelStore.js'
 const gradeLevelStore = useGradeLevelStore()
 
 const props = defineProps({
-  id: String,
-  name: String,
-  entryYear: Number
+  id: { 
+    Type: String, 
+    Default: '' 
+  },
+  name: { 
+    Type: String, 
+    Default: '' 
+  },
+  entryYear: { 
+    Type: Number, 
+    Default: 0 
+  },
 })
 const handleEditButtonClick = () => {
   gradeLevelStore.formVisible = true

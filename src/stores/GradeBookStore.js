@@ -63,7 +63,7 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
       isLoading.value = false
     }
   }
-  const getIntervalGradeBooks = async (start, lessonId) => {
+  const getIntervalGradeBooks = async (start, lessonId, gradeBookId) => {
     const currentDate = new Date(start)
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
@@ -71,7 +71,10 @@ export const useGradeBookStore = defineStore('gradeBook', () => {
 
     isLoading.value = true
     try {
-      const response = await utils.sendRequest('GET', url + lessonId + '/' + start + '/' + end)
+      const response = await utils.sendRequest(
+        'GET',
+        url + lessonId + '/' + gradeBookId + '/' + start + '/' + end
+      )
       data.value = response
       fillGradesTable(start)
       error.value = null

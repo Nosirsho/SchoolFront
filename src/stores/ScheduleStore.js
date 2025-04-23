@@ -1,12 +1,14 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import utils from '@/utils/utils'
 
 const url = 'http://localhost:8010/Schedule/'
 
 export const useScheduleStore = defineStore('schedule', () => {
   const data = ref([])
   const error = ref(null)
+  const showModal = ref([])
   const isLoading = ref(false)
 
   const dataCount = computed(() => data.value.length)
@@ -117,6 +119,32 @@ export const useScheduleStore = defineStore('schedule', () => {
       isLoading.value = false
     }
   }
+
+  const getScheduleByDayForGradeLevel = async (returning, gradeLevelId, date) => {
+    isLoading.value = true
+    try {
+      const response = await utils.sendRequest(
+        'GET',
+        'http://localhost:8010/schedules/' + gradeLevelId +'/'+ date
+      )
+      if (response.state === 0) {
+        showModalWindow(true, response.message)
+        return
+      }
+      data.value = response
+      if (returning) {
+        return data.value
+      }
+      error.value = null
+    } catch (error) {
+      error.value = error
+      showModalWindow(true, error.message)
+      data.value = null
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   const filterByGradeLevel = (text) => {
     return data.value.filter((g) => g.gradeLevel.toLowerCase().includes(text))
   }
@@ -129,8 +157,19 @@ export const useScheduleStore = defineStore('schedule', () => {
       )
   )
 
+  //Модальное окно
+  const showModalVisible = computed(() => showModal.value.visible)
+  const showModalWindow = (isError, msg) => {
+    showModal.value.visible = true
+    showModal.value.isError = isError
+    showModal.value.message = msg
+  }
+  //End Модальное окно
+
   return {
     data,
+    showModal,
+    showModalVisible,
     dataCount,
     getSchedules,
     addLesson,
@@ -138,6 +177,7 @@ export const useScheduleStore = defineStore('schedule', () => {
     setLesson,
     addScheduleList,
     filterByGradeLevel,
-    dayStrngs
+    dayStrngs,
+    getScheduleByDayForGradeLevel
   }
 })
