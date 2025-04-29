@@ -139,7 +139,7 @@ export const useTeacherStore = defineStore('teacher', () => {
       isLoading.value = false
     }
   }
-  const teachersCount = computed(() => data.value.length)
+  const teachersCount = computed(() => data.value && data.value.length > 0 ?  data.value.length : 0)
 
   //Модальное окно
   const showModalVisible = computed(() => showModal.value.visible)

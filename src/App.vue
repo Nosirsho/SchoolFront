@@ -3,6 +3,10 @@ import { ref } from 'vue'
 import Sidebar from '/src/components/sidebar/Sidebar.vue'
 import Header from '/src/components/Header/Header.vue'
 import Main from '/src/components/main/Main.vue'
+import { useAuthStore } from '@/stores/AuthStore'
+
+const authStore = useAuthStore()
+
 const sidebarOpen = ref(false)
 </script>
 <template>
@@ -14,7 +18,7 @@ const sidebarOpen = ref(false)
         class="fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden"
       ></div>
       <!--Sidebar-->
-      <Sidebar />
+      <Sidebar v-if="authStore.isAuthentificated" />
       <!--End Sidebar-->
       <div class="flex flex-col flex-1 overflow-hidden">
         <!--Header-->

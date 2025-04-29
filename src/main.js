@@ -1,36 +1,13 @@
 import './assets/main.css'
-import { createRouter, createWebHistory } from 'vue-router'
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
+import router from './router/index.js'
 
-import TeacherPage from './pages/TeacherPage.vue'
-import StudentPage from './pages/StudentPage.vue'
-import SchedulePage from '@/pages/SchedulePage.vue'
-import GradeBookPage from './pages/GradeBookPage.vue'
-import SysSettingPage from './pages/SysSettingPage.vue'
-import ParentPage from './pages/ParentPage.vue'
-import GradeLevelPage from './pages/GradeLevelPage.vue'
-import LessonPage from './pages/LessonPage.vue'
-import NotificationSenderPage from './pages/NotificationSenderPage.vue'
 
-const routes = [
-  { path: '/students', name: 'StudentPage', component: StudentPage },
-  { path: '/teachers', name: 'TeacherPage', component: TeacherPage },
-  { path: '/schedules', name: 'SchedulePage', component: SchedulePage },
-  { path: '/gradebooks', name: 'GradeBookPage', component: GradeBookPage },
-  { path: '/syssettings', name: 'SysSettingPage', component: SysSettingPage },
-  { path: '/parents', name: 'ParentPage', component: ParentPage },
-  { path: '/gradelevels', name: 'GradeLevelPage', component: GradeLevelPage },
-  { path: '/lessons', name: 'LessonPage', component: LessonPage },
-  { path: '/notificationsender', name: 'NotificationSenderPage', component: NotificationSenderPage }
-]
-const router = createRouter({
-  history: createWebHistory(),
-  routes
-})
+
 const app = createApp(App)
 const pinia = createPinia()
 

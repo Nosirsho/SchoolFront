@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { useAuthStore } from '@/stores/AuthStore.js'
+
 export default {
   formatDate: (date) => {
     const year = date.getFullYear()
@@ -13,10 +15,12 @@ export default {
 
   sendRequest: async (method, url, data = null) => {
     try {
+      const token = localStorage.getItem('token')
       const response = await axios({
         method,
         url,
-        data
+        data,
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
       })
 
       // Проверяем статус код и структуру ApiResponse
@@ -37,6 +41,11 @@ export default {
         throw new Error(`Ошибка запроса: ${response.status}`)
       }
     } catch (error) {
+      if (error.status === 401) {
+        const authStore = useAuthStore()
+        await authStore.logout()
+        return
+      }
       console.error('Ошибка запроса:', error)
       throw error // Пробрасываем ошибку выше для обработки в компоненте
     }
